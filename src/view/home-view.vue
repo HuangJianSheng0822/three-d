@@ -24,13 +24,15 @@ import HomeTopBar from "@/components/home-top-bar.vue";
 import PageMax from "@/components/page-max.vue";
 import {ref} from "vue";
 const pageData=ref(null)
+
 const handlePageData = (data) => {
-  console.log("父组件："+data); // 输出子组件传递来的data
-  pageData.value=data
+  pageData.value=data.data
+  console.log(pageData.value)
+
 };
 const pageParams=ref({
-  type:"get",
-  url:"xxx",
+  type:"post",
+  url:"http://localhost:8080/content/list",
   config:null,
   page_size:10
 })
@@ -45,8 +47,6 @@ const pageParams=ref({
   height: 100%;
 
 }
-
-
 
 .list {
   width: 100%;

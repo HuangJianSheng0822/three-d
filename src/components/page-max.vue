@@ -40,15 +40,15 @@ const fatherData=defineProps({
   }
 })
 
-function getApi(type, url, config, page,page_size) {
+async function getApi(type, url, config, page, page_size) {
   console.log(type)
   try {
-    const response = axios({
+    const response = await axios({
       method: type,
       url: url,
       params: {
-        page:page,
-        page_size:page_size
+        page: page,
+        size: page_size
       },
       ...config
     });
