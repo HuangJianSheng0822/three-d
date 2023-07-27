@@ -38,7 +38,7 @@ const fatherData=defineProps({
 
 //页面改变
 const currentChange=(page)=>{
-  axios.get(`http://localhost:8080/content/list?page=`+page+"&size="+fatherData.page_size).then(res => {
+  axios.post(`http://localhost:8080/content/list?page=`+page+"&size="+fatherData.page_size).then(res => {
     console.log(res.data.code)
     emit('page_data', res.data)
   })

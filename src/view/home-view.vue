@@ -1,11 +1,14 @@
 <template>
   <div class="root">
+
     <div class="top">
       <home-top-bar></home-top-bar>
     </div>
-    <div class="list" :items="pageData">
 
+    <div class="list">
+      <video-info-list :items="pageData.data"></video-info-list>
     </div>
+    <!--
     <div class="page" >
       <page-max
           @page_data="handlePageData"
@@ -14,6 +17,7 @@
           :config="pageParams.config"
           :page_size="pageParams.page_size" />
     </div>
+    -->
   </div>
 
 
@@ -21,21 +25,52 @@
 
 <script setup>
 import HomeTopBar from "@/components/home-top-bar.vue";
-import PageMax from "@/components/page-max.vue";
+//import PageMax from "@/components/page-max.vue";
+import VideoInfoList from "@/components/video-info-list.vue";
 import {ref} from "vue";
-const pageData=ref(null)
+const pageData=ref({
+  "code": 200,
+  "msg": "OK",
+  "data": [
+    {
+      "id": "1679163163502714882",
+      "title": "title1",
+      "imgSrc": null,
+      "userId": "u1",
+      "userName": "n1",
+      "headImg": "1",
+      "userDesc": null,
+      "coverUrl": "https://bilibilicloud.oss-cn-beijing.aliyuncs.com/noData.jpg",
+      "created": "21-1-1"
+    },
+    {
+      "id": "1679164416563617793",
+      "title": "《你的名字》",
+      "imgSrc": null,
+      "userId": "u1",
+      "userName": "n1",
+      "headImg": "1",
+      "userDesc": null,
+      "coverUrl": "https://bilibilicloud.oss-cn-beijing.aliyuncs.com/20230527145250Aicy.jpg",
+      "created": "21-1-1"
+    }
+  ]
+})
 
+/*
 const handlePageData = (data) => {
   pageData.value=data.data
   console.log("夫"+data.data)
 };
+ */
+/*
 const pageParams=ref({
   type:"get",
   url:"http://localhost:8080/content/list",
   config:null,
   page_size:10
 })
-
+*/
 </script>
 
 <style scoped>
@@ -44,13 +79,13 @@ const pageParams=ref({
   display: flex;
   flex-direction: column;
   height: 100%;
-
 }
-
+.top{
+  height: 50px;
+}
 .list {
   width: 100%;
   flex: 1;
-  background-color: red;
 }
 
 .page {

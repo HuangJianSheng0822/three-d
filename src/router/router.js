@@ -7,6 +7,7 @@ import {
 import LoginView from "@/components/login-view.vue";
 import RegisterView from "@/components/register-view.vue";
 import HomeView from "@/view/home-view.vue";
+import VideoPlayView from "@/view/video-play-view.vue";
 const routes = [
     {
         path: "/login",
@@ -19,6 +20,11 @@ const routes = [
     {
         path: "/home",
         component:HomeView
+    },
+    {
+        path: "/playing/:id/:userId",
+        name: "playing",
+        component:VideoPlayView
     },
     {
         path: '/',

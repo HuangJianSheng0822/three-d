@@ -1,12 +1,12 @@
-<template>
+
   <template>
     <div class="main">
 
-      <div v-for="(item,index) in items" :key="index">
+      <div v-for="(item,index) in fatherData.items" :key="index">
         <div class="feed-card">
           <div class="video-card">
-            <router-link :to="'/video-play/'+item.id+'/'+item.id">
-              <img :src="item.coverUrl"/>
+            <router-link :to="'/playing/'+item.id+'/'+item.userId">
+              <img :src="item.coverUrl" alt=""/>
             </router-link>
 
           </div>
@@ -37,7 +37,7 @@
       </div>
     </div>
   </template>
-</template>
+
 
 <script setup>
 import {defineProps} from 'vue'
@@ -48,7 +48,65 @@ const fatherData=defineProps({
     required:false
   }
 })
+
+console.log(fatherData.items[1])
 </script>
 <style scoped>
+.feed-card {
+  width: 334px;
+  height: 263px;
+  min-width: 217px;
+  border-color: rebeccapurple;
+  margin: 20px 10px;
+}
 
+.video-card {
+  height: 188px;
+  min-height: 135px;
+  margin-bottom: 6px;
+}
+
+.video-card>a>img {
+  width: 100%;
+  height: 100%;
+  border-radius: 2%;
+}
+
+.video-card-info-tit {
+  height: 44px;
+  margin-bottom: 6px;
+}
+
+.video-card-info-bottom {
+  height: 17px;
+}
+
+.video-card-info-bottom {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.video-card-info-bottom>* ,a {
+  color: #9499a0;
+}
+
+a:hover {
+  color: #008AC5;
+}
+
+.video-card-info-tit>*:hover {
+  color: #008AC5;
+}
+
+.main {
+  min-width: 1100px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  padding: 0 200px;
+}
+
+a{
+  text-decoration:none;
+}
 </style>

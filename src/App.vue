@@ -8,8 +8,6 @@
 
 </script>
 
-<style>
-.root{
-  height: 100%;
-}
+<style scoped>
+
 </style>
