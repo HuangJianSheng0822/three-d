@@ -12,7 +12,6 @@
           </div>
           <div class="video-card-info-tit">
             <a :href="'https://www.catchstar.top?id='+item.id"><h3 style="color: black;"> {{item.title}} </h3></a>
-
           </div>
           <div class="video-card-info-bottom">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
