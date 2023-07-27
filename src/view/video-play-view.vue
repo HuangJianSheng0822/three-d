@@ -14,10 +14,8 @@
       <div class="comment-area">
         <comment-box></comment-box>
       </div>
-
     </div>
     <div class="main-right">
-
     </div>
   </div>
 
@@ -28,7 +26,35 @@ import PlayingTitle from "@/components/playing-title.vue";
 import PlayingBox from "@/components/playing-box.vue";
 import CommentBox from "@/components/comment-box.vue";
 import HomeTopBar from "@/components/home-top-bar.vue";
-
+import {useRoute} from "vue-router";
+import axios from "axios";
+import {ref} from "vue";
+const route=useRoute()
+const id=route.params.id
+const userId=route.params.userId
+getUserInfo(userId)
+getVideoInfo(id);
+//根据id获取视频标题信息
+const userInfo=ref(null)
+//根据id获取视频信息
+function getUserInfo(userId){
+  axios.get("http://localhost:8080/users/"+userId)
+      .then((res)=>{
+        userInfo.value=res.data.data
+      })
+      .catch(error => {
+        console.error(error);
+      });
+}
+function getVideoInfo(id){
+  axios.post("www"+id)
+      .then((res)=>{
+        userInfo.value=res.data.data
+      })
+      .catch(error => {
+        console.error(error);
+      });
+}
 </script>
 
 <style scoped>
