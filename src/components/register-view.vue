@@ -81,7 +81,7 @@ const rules=ref({
 const submitForm=()=>{
   register_ref.value.validate(valid => {
     if (valid) {
-      axios.post('http://localhost:8080/register', this.register)
+      axios.post('http://localhost:8080/users/register', register_form.value)
           .then(response => {
             console.log('resp=>'+response.data.data)
             // 注册成功，重定向到新页面
@@ -103,9 +103,22 @@ const sendVerificationCode=()=>{
   // 判断邮箱的合法性
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (emailRegex.test(register_form.value.email)) {
-    
+    axios.post('http://localhost:8080/email/'+register_form.value.email)
+        // eslint-disable-next-line no-unused-vars
+        .then(response => {
+          // 发送成功后开始倒计时
+          countDown.value = 60;
+          const timer = setInterval(() => {
+            countDown.value--
+            if (countDown.value <= 0) {
+              clearInterval(timer);
+            }
+          }, 1000);
+        })
+        .catch(error => {
+          console.error('发送验证码失败:', error);
+        });
   }
-
 }
 
 

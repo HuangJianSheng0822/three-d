@@ -63,7 +63,7 @@ const submitForm=()=>{
   login_ref.value.validate(valid => {
     if (valid) {
       // 发送POST请求到登录路径
-      axios.post('http://localhost:8080/login', login_form)
+      axios.post('http://localhost:8080/users/login', login_form.value)
           .then(response => {
             console.log('resp=>'+response.data.data)
             // 登录成功，重定向到新页面
