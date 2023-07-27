@@ -41,7 +41,10 @@
 <script setup>
 
 import {ref} from "vue";
+import axios from "axios";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 const login_form=ref({
   email:'',
   pwd:''
@@ -58,9 +61,26 @@ const rules=ref({
 })
 const submitForm=()=>{
   login_ref.value.validate(valid => {
-    if (!valid) {
-      return
+    if (valid) {
+      // 发送POST请求到登录路径
+      axios.post('http://localhost:8080/login', login_form)
+          .then(response => {
+            console.log('resp=>'+response.data.data)
+            // 登录成功，重定向到新页面
+            if (!response.data.data=='') {
+              localStorage.setItem("jwt",response.data.data)
+              router.push('/home');
+            } else {
+              // 登录失败，弹窗提示
+              //alert('用户名或密码错误');
+              router.push('/videoplay');
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
     }
+
   })
 }
 

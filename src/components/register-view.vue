@@ -54,6 +54,9 @@
 <script setup>
 
 import {ref} from "vue";
+import {useRouter} from "vue-router";
+import axios from "axios";
+const router = useRouter();
 
 const register_form=ref({
   name:'',
@@ -77,8 +80,21 @@ const rules=ref({
 })
 const submitForm=()=>{
   register_ref.value.validate(valid => {
-    if (!valid) {
-      return
+    if (valid) {
+      axios.post('http://localhost:8080/register', this.register)
+          .then(response => {
+            console.log('resp=>'+response.data.data)
+            // 注册成功，重定向到新页面
+            if (response.data.data!=null) {
+              localStorage.setItem("jwt",response.data.data)
+              router.push('/home');
+            } else {
+              alert("注册失败")
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
     }
   })
 }
@@ -86,11 +102,10 @@ const countDown=ref(0)
 const sendVerificationCode=()=>{
   // 判断邮箱的合法性
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(register_form.value.email)) {
-    this.$message.error('请输入有效的邮箱');
-    return;
+  if (emailRegex.test(register_form.value.email)) {
+    
   }
-  //发送验证码
+
 }
 
 

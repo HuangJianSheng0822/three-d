@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import {ref,defineEmits,defineProps} from "vue";
+import {defineEmits, defineProps, ref} from "vue";
 import axios from "axios";
 
 const total=ref(100)
@@ -26,10 +26,6 @@ const fatherData=defineProps({
     type:Number,
     required:true
   },
-  type:{
-    type:String,
-    required:false
-  },
   url:{
     type:String,
     required:true
@@ -40,30 +36,12 @@ const fatherData=defineProps({
   }
 })
 
-async function getApi(type, url, config, page, page_size) {
-  console.log(type)
-  try {
-    const response = await axios({
-      method: type,
-      url: url,
-      params: {
-        page: page,
-        size: page_size
-      },
-      ...config
-    });
-    return response.data;
-  } catch (error) {
-    console.error('请求发生异常：', error);
-    throw error;
-  }
-}
-
 //页面改变
 const currentChange=(page)=>{
-  console.log(page)
-  // eslint-disable-next-line no-undef
-  emit('page_data', getApi(fatherData.type,fatherData.url,fatherData.config,page,fatherData.page_size))
+  axios.get(`http://localhost:8080/content/list?page=`+page+"&size="+fatherData.page_size).then(res => {
+    console.log(res.data.code)
+    emit('page_data', res.data)
+  })
 }
 
 </script>

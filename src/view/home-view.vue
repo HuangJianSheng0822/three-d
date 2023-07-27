@@ -27,11 +27,10 @@ const pageData=ref(null)
 
 const handlePageData = (data) => {
   pageData.value=data.data
-  console.log(pageData.value)
-
+  console.log("夫"+data.data)
 };
 const pageParams=ref({
-  type:"post",
+  type:"get",
   url:"http://localhost:8080/content/list",
   config:null,
   page_size:10
