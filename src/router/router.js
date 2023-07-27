@@ -8,6 +8,8 @@ import LoginView from "@/components/login-view.vue";
 import RegisterView from "@/components/register-view.vue";
 import HomeView from "@/view/home-view.vue";
 import VideoPlayView from "@/view/video-play-view.vue";
+import UploadContent from "@/view/upload-content.vue";
+import VideoUpload from "@/components/video-upload.vue";
 const routes = [
     {
         path: "/login",
@@ -25,6 +27,19 @@ const routes = [
         path: "/playing/:id/:userId",
         name: "playing",
         component:VideoPlayView
+    },
+    {
+        path: "/content",
+        name: "content",
+        component:UploadContent,
+        redirect: '/video-upload',
+        children: [
+            {
+                path: '/video-upload',
+                name: 'video-upload',
+                component: VideoUpload
+            }
+        ]
     },
     {
         path: '/',

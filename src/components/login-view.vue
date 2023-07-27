@@ -65,10 +65,9 @@ const submitForm=()=>{
       // 发送POST请求到登录路径
       axios.post('http://localhost:8080/users/login', login_form.value)
           .then(response => {
-            console.log('resp=>'+response.data.data)
             // 登录成功，重定向到新页面
             if (!response.data.data=='') {
-              localStorage.setItem("jwt",response.data.data)
+              localStorage.setItem("jwt",response.data.data.token)
               router.push('/home');
             } else {
               // 登录失败，弹窗提示

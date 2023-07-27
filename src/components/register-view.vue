@@ -86,7 +86,7 @@ const submitForm=()=>{
             console.log('resp=>'+response.data.data)
             // 注册成功，重定向到新页面
             if (response.data.data!=null) {
-              localStorage.setItem("jwt",response.data.data)
+              localStorage.setItem("jwt",response.data.data.token)
               router.push('/home');
             } else {
               alert("注册失败")

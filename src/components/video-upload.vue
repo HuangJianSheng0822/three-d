@@ -8,6 +8,14 @@
           <input type="file" @change="fileChange($event)" class="file-up" title="" id="fileUpload">
         </div>
       </div>
+
+      <!--
+      <div class="upload-type">
+        <button @click="authUpload" :disabled="uploadDisabled" class="upload-start-btn">开始上传</button>
+        <button @click="pauseUpload" :disabled="pauseDisabled">暂停</button>
+        <button :disabled="resumeDisabled" @click="resumeUpload">恢复上传</button>
+      </div>
+      -->
     </div>
 
 
@@ -34,9 +42,11 @@
         </div>
       </div>
 
+
       <!--------------------------视频参数配置-------------------------------->
       <div class="video-setting-area">
         <!---------------封面上传区域--------------------->
+
 
         <!---------------表单上传区域--------------------->
         <el-form
@@ -49,7 +59,7 @@
           <el-form-item label="封面" prop="coverUrl">
             <el-upload
                 class="avatar-uploader"
-                action="http://localhost:8080/video/uploadCover"
+                action="http://localhost:8080/upload"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
@@ -74,6 +84,7 @@
             </el-select>
           </el-form-item>
 
+
           <!-------tag---->
           <el-form-item label="Tags">
             <el-tag v-for="(tag, index) in form.tags" :key="index" closable @close="removeTag(index)">
@@ -81,6 +92,9 @@
             </el-tag>
             <el-input v-model="newTag" placeholder="Enter a tag" @keyup.enter="addTag"></el-input>
           </el-form-item>
+
+
+
 
           <el-form-item label="简介" prop="description">
             <el-input type="textarea" v-model="form.description"  placeholder="填写更全面的相关信息，让更多的人能找到你的视频吧(:"></el-input>
@@ -100,237 +114,412 @@
   </div>
 </template>
 
-<script setup>
-import {ref} from "vue";
-import axios from "axios";
-import router from "@/router/router";
-const showUpload=ref(true)// 是否显示上传界面
-const file=ref(null)
-const authProgress=ref(0) // 上传进度
-const uploadDisabled=ref(true) // 开始，此时不能点击
-const resumeDisabled=ref(false) // 恢复上传
-const pauseDisabled=ref(true)// 暂停
-const uploader=ref(null)
-const statusText=ref('')
-const newTag=ref('')
-const form=ref({
-  videoId:'',
-  coverUrl:'',
-  title: 'title',
-  typeId: '',
-  description: '',
-  tags:[],
-})
-const rules=ref({
-  coverUrl: [
-    { required: true,message: '封面不能为空', trigger: 'blur'},
-  ],
-  title: [
-    { required: true, message: '请输入活动名称', trigger: 'blur' },
-    { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
-  ],
-  typeId: [
-    { required: true, message: '请选择活动区域', trigger: 'change' }
-  ],
-  description: [
-    { required: false, message: '', trigger: 'blur' }
-  ]
-})
+<script>
+import axios from 'axios';
+export default {
+  data() {
+    return {
 
-const fileChange=(e)=>{
-  file.value = e.target.files[0];
-  if (!file.value) {
-    alert('请先选择需要上传的文件!');
-    return;
-  }
-  //var Title = file.value.name;
-  var userData = '{"Vod":{}}';
-  // 修改文件时停止上传
-  if (uploader.value) {
-    uploader.value.stopUpload();
-    authProgress.value = 0;
-    statusText.value = '';
-  }
-  // 上传
-  const _this = this;
-  uploader.value = createUploader(_this);
-  uploader.value.addFile(file.value, null, null, null, userData);
-  uploadDisabled.value = false;
-  pauseDisabled.value = true;
-  resumeDisabled.value = false;
-  authUpload();
-}
-const authUpload = () => {
-  if (uploader.value !== null) {
-    uploader.value.startUpload();
-    uploadDisabled.value = true;
-    pauseDisabled.value = false;
-  }
-}
-
-const pauseUpload = () => {
-  if (uploader.value !== null) {
-    uploader.value.stopUpload();
-    resumeDisabled.value = false;
-    pauseDisabled.value = true;
-    console.log("stop");
-  }
-};
-
-const resumeUpload = () => {
-  if (uploader.value !== null) {
-    uploader.value.startUpload();
-    resumeDisabled.value = true;
-    pauseDisabled.value = false;
-  }
-}
-function createUploader(_this) {
-  _this.resumeDisabled = false;
-  // eslint-disable-next-line no-undef
-  const uploader = new AliyunUpload.Vod({
-    timeout: 60000,
-    partSize: 1048576,
-    parallel: 5,
-    retryCount: 3,
-    retryDuration: 2,
-    localCheckpoint: true,
-    addFileSuccess(uploadInfo) {
-      _this.uploadDisabled = false;
-      _this.resumeDisabled = false;
-      _this.statusText = '添加文件成功, 等待上传...';
-      console.log('addFileSuccess: ' + uploadInfo.file.name);
+      file: null,
+      authProgress: 0, // 上传进度
+      uploadDisabled: true, // 开始，此时不能点击
+      resumeDisabled: false, // 恢复上传
+      pauseDisabled: true, // 暂停
+      uploader: null,
+      statusText: '',
+      showUpload: true, // 是否显示上传界面
+      //表单
+      form: {
+        videoId:'',
+        coverUrl:'',
+        title: 'title',
+        typeId: '',
+        description: '',
+        tags:[],
+      },
+      newTag: '',
+      //表单校验
+      rules: {
+        coverUrl: [
+          { required: true,message: '封面不能为空', trigger: 'blur'},
+        ],
+        title: [
+          { required: true, message: '请输入活动名称', trigger: 'blur' },
+          { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+        ],
+        typeId: [
+          { required: true, message: '请选择活动区域', trigger: 'change' }
+        ],
+        description: [
+          { required: false, message: '', trigger: 'blur' }
+        ]
+      }
+    };
+  },
+  methods: {
+    fileChange(e) {
+      this.file = e.target.files[0];
+      if (!this.file) {
+        alert('请先选择需要上传的文件!');
+        return;
+      }
+      var userData = '{"Vod":{}}';
+      // 修改文件时停止上传
+      if (this.uploader) {
+        this.uploader.stopUpload();
+        this.authProgress = 0;
+        this.statusText = '';
+      }
+      // 上传
+      const _this=this;
+      this.uploader = this.createUploader(_this);
+      this.uploader.addFile(this.file, null, null, null, userData);
+      this.uploadDisabled = false;
+      this.pauseDisabled = true;
+      this.resumeDisabled = false;
+      this.authUpload();
     },
-    onUploadstarted(uploadInfo) {
-      if (!uploadInfo.videoId) {
-        // 首次提交
-        // axios 请求
-        const createUrl = 'http://localhost:8080/video/getUploadAuth';
-        axios.post(createUrl).then(({ data }) => {
-          if (data.data == null) {
-            alert("上传接口异常");
-            return;
-          }
-          _this.showUpload = false;
-          const uploadAuth = data.data.uploadAuth;
-          const uploadAddress = data.data.uploadAddress;
-          const videoId = data.data.videoId;
-          uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress, videoId);
-        });
-        _this.statusText = '文件开始上传...';
-      } else {
-        // 如果videoId有值，根据videoId刷新上传凭证
-        const refreshUrl = 'http://localhost:8080/video/refreshUploadAuth/' + uploadInfo.videoId;
-        axios.post(refreshUrl).then(({ data }) => {
-          if (data.data == null) {
-            alert("上传接口异常");
-            return;
-          }
-          const uploadAuth = data.data.uploadAuth;
-          const uploadAddress = data.data.uploadAddress;
-          const videoId = data.data.videoId;
-          uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress, videoId);
-        });
+    authUpload() {
+      // 然后调用 startUpload 方法, 开始上传
+      if (this.uploader !== null) {
+        this.uploader.startUpload();
+        this.uploadDisabled = true;
+        this.pauseDisabled = false;
       }
     },
-    onUploadSucceed(uploadInfo) {
-      _this.statusText = '文件上传成功!';
-      _this.showUpload = false; // 上传成功后隐藏上传界面
-      console.log("成功" + uploadInfo.videoId);
-      console.log(_this.form);
-      _this.form.videoId = uploadInfo.videoId;
+    // 暂停上传
+    pauseUpload() {
+      if (this.uploader !== null) {
+        this.uploader.stopUpload();
+        this.resumeDisabled = false;
+        this.pauseDisabled = true;
+        console.log("stop")
+      }
     },
-    // eslint-disable-next-line no-unused-vars
-    onUploadFailed(uploadInfo, code, message) {
-      _this.statusText = '文件上传失败!';
+    // 恢复上传
+    resumeUpload() {
+      if (this.uploader !== null) {
+        this.uploader.startUpload();
+        this.resumeDisabled = true;
+        this.pauseDisabled = false;
+      }
     },
-    // eslint-disable-next-line no-unused-vars
-    onUploadCanceled(uploadInfo, code, message) {
-      _this.statusText = '文件已暂停上传';
-    },
-    onUploadProgress(uploadInfo, totalSize, progress) {
-      const progressPercent = Math.ceil(progress * 100);
-      _this.authProgress = progressPercent;
-      _this.statusText = '文件上传中...';
-    },
-    onUploadTokenExpired(uploadInfo) {
-      const refreshUrl = 'https://demo695-mp4&VideoId=' + uploadInfo.videoId;
-      axios.get(refreshUrl).then(({ data }) => {
-        const uploadAuth = data.UploadAuth;
-        uploader.resumeUploadWithAuth(uploadAuth);
+    createUploader(_this) {
+      this.resumeDisabled = false;
+      let self = this;
+      // eslint-disable-next-line no-undef
+      let uploader = new AliyunUpload.Vod({
+        timeout: 60000, // 请求超时
+        partSize: 1048576, // 分片大小，默认1MB
+        parallel: 5, // 并行上传分片个数，默认为5
+        retryCount: 3, // 失败重试次数，默认为3
+        retryDuration: 2, // 失败重试间隔时间，默认2秒
+        localCheckpoint: true, // 此参数是禁用服务端缓存，不影响断点续传
+        // 添加文件成功
+        addFileSuccess: function(uploadInfo) {
+          self.uploadDisabled = false;
+          self.resumeDisabled = false;
+          self.statusText = '添加文件成功, 等待上传...';
+          console.log('addFileSuccess: ' + uploadInfo.file.name);
+        },
+        // 开始上传
+        onUploadstarted: function(uploadInfo) {
+          // 如果是 UploadAuth 上传方式, 需要调用 uploader.setUploadAuthAndAddress 方法
+          // 如果是 UploadAuth 上传方式, 需要根据 uploadInfo.videoId是否有值，调用点播的不同接口获取uploadauth和uploadAddress
+          // 如果 uploadInfo.videoId 有值，调用刷新视频上传凭证接口，否则调用创建视频上传凭证接口
+          // 如果 uploadInfo.videoId 存在, 调用 刷新视频上传凭证接口
+          // 如果 uploadInfo.videoId 不存在,调用 获取视频上传地址和凭证接口
+          if (!uploadInfo.videoId) {
+            // 首次提交
+            // axios 请求
+            let createUrl = 'http://localhost:8080/video/getUploadAuth';
+            axios.post(createUrl).then(({ data }) => {
+              if (data.data==null){
+                alert("上传接口异常")
+                return;
+              }
+              self.showUpload = false;
+              let uploadAuth = data.data.uploadAuth;
+              let uploadAddress = data.data.uploadAddress;
+              let videoId = data.data.videoId;
+
+              uploader.setUploadAuthAndAddress(
+                  uploadInfo,
+                  uploadAuth,
+                  uploadAddress,
+                  videoId
+              );
+            });
+            self.statusText = '文件开始上传...';
+
+          } else {
+            // 如果videoId有值，根据videoId刷新上传凭证
+            let refreshUrl = 'http://localhost:8080/video/refreshUploadAuth/' + uploadInfo.videoId;
+            axios.post(refreshUrl).then(({ data }) => {
+              if (data.data==null){
+                alert("上传接口异常")
+                return;
+              }
+
+              let uploadAuth = data.data.uploadAuth;
+              let uploadAddress = data.data.uploadAddress;
+              let videoId = data.data.videoId;
+              uploader.setUploadAuthAndAddress(
+                  uploadInfo,
+                  uploadAuth,
+                  uploadAddress,
+                  videoId
+              );
+            });
+          }
+        },
+        // 文件上传成功
+        onUploadSucceed: function(uploadInfo) {
+
+          self.statusText = '文件上传成功!';
+          self.showUpload = false; // 上传成功后隐藏上传界面
+          console.log("成功"+uploadInfo.videoId)
+          console.log(_this.form)
+          _this.form.videoId=uploadInfo.videoId;
+        },
+        // 文件上传失败
+        // eslint-disable-next-line no-unused-vars
+        onUploadFailed: function(uploadInfo, code, message) {
+          self.statusText = '文件上传失败!';
+        },
+        // 取消文件上传
+        // eslint-disable-next-line no-unused-vars
+        onUploadCanceled: function(uploadInfo, code, message) {
+          self.statusText = '文件已暂停上传';
+        },
+        // 文件上传进度，单位：字节，可以在这个函数中拿到上传进度并显示在页面上
+        onUploadProgress: function(uploadInfo, totalSize, progress) {
+          let progressPercent = Math.ceil(progress * 100);
+          self.authProgress = progressPercent;
+          self.statusText = '文件上传中...';
+        },
+        // 上传凭证超时
+        onUploadTokenExpired: function(uploadInfo) {
+          // 上传大文件超时，如果是上传方式一即根据 UploadAuth 上传时
+          // 需要根据 uploadInfo.videoId 调用刷新视频上传凭证接口(https://help.aliyun.com/document_detail/55408.html)重新获取 UploadAuth
+          // 然后调用 resumeUploadWithAuth 方法，这里是测试接口，所以我直接获取了 UploadAuth
+          let refreshUrl =
+              'https://demo695-mp4&VideoId=' + uploadInfo.videoId;
+          axios.get(refreshUrl).then(({ data }) => {
+            let uploadAuth = data.UploadAuth;
+            uploader.resumeUploadWithAuth(uploadAuth);
+            console.log(
+                'upload expired and resume upload with uploadauth ' +
+                uploadAuth
+            );
+          });
+          self.statusText = '文件超时...';
+        },
+        // 全部文件上传结束
+        // eslint-disable-next-line no-unused-vars
+        onUploadEnd: function(uploadInfo) {
+          console.log('onUploadEnd: uploaded all the files');
+          self.statusText = '文件上传完毕';
+
+        }
       });
-      _this.statusText = '文件超时...';
+      return uploader;
     },
-    // 全部文件上传结束
+
+    /*-------------------------------参数表单--------------------------------------*/
+    //封面上传
     // eslint-disable-next-line no-unused-vars
-    onUploadEnd(uploadInfo) {
-      console.log('onUploadEnd: uploaded all the files');
-      _this.statusText = '文件上传完毕';
-    }
-  });
+    handleAvatarSuccess(res, file) {
+      console.log(res)
+      this.form.coverUrl = res.data;
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg';
+      if (!isJPG) {
+        this.$message.error('只能上传图片!');
+      }
+      return isJPG;
+    },
+    //tag事件
 
-  return uploader;
-}
+    addTag() {
+      if (this.newTag) {
+        this.form.tags.push(this.newTag);
+        this.newTag = '';
+      }
+    },
+    removeTag(index) {
+      this.form.tags.splice(index, 1);
+    },
 
-// 图片上传
-// eslint-disable-next-line no-unused-vars
-const handleAvatarSuccess = (res, file) => {
-  console.log(res);
-  form.value.coverUrl = res;
-};
 
-// 上传前
-const beforeAvatarUpload = (file) => {
-  const isJPG = file.type === 'image/jpeg';
-  if (!isJPG) {
-    alert('只能上传图片!');
-  }
-  return isJPG;
-};
 
-// 添加tag
-const addTag = () => {
-  if (newTag.value) {
-    form.value.tags.push(newTag.value);
-    newTag.value = '';
-  }
-};
-
-// 删除tag
-const removeTag = (index) => {
-  form.value.tags.splice(index, 1);
-};
-
-// 表单提交
-
-// eslint-disable-next-line no-unused-vars
-const submitForm = (formName) => {
-  form.value.validate((valid) => {
-    if (valid) {
-      console.log('jwt:' + localStorage.getItem('jwt'));
-      axios.post('http://localhost:8080/content/add', form, {
+    //表单提交
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log("jwt:"+localStorage.getItem("jwt"));
+          axios.post('http://localhost:8080/content/add', this.form,{
             headers: {
-              Authorization: localStorage.getItem('jwt'),
-            },
-          })
-          .then((response) => {
-            if (response.data.data) {
-              // Success logic, you can use page redirection or programmatic navigation
-              router.push('/home');
-            } else {
-              alert('接口异常');
+              'Authorization': localStorage.getItem("jwt")
             }
           })
-          .catch((error) => {
-            console.error(error);
-          });
-    } else {
-      console.log('error submit!!');
-      return false;
+              .then(response => {
+                if (response.data.data) {
+                  // 成功后的跳转逻辑，可以使用页面重定向或者编程式导航
+                  this.$router.push('/home');
+
+                } else {
+
+                  alert('接口异常');
+                }
+              })
+              .catch(error => {
+                console.error(error);
+              });
+
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
     }
-  })
+
+  }
+
+
+};
+</script>
+
+<style scoped>
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-</script>
-<style scoped>
 
+.upload-container{
+  display: flex;
+  align-items: center; /*垂直方向居中*/
+  justify-content: center;  /*水平方向居中*/
+  border: 1px dashed #00AEEC;
+  height: 255px;
+}
+.file {
+  margin-bottom: 30px;
+}
+.fileinp {
+  width: 108px;
+  height: 30px;
+  overflow: hidden;
+  position: relative;
+  margin: auto;
+  background-color: #00AEEC;
+  text-align: center;
+}
+.upload {
+  width: 70%;
+  border-radius: 13px;
+  text-align: center;
+  padding: 4px;
+  color: #fff;
+  margin-left: 11px;
+}
+.file-up {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 30px;
+  cursor: pointer;
+
+}
+.upload-success{
+  flex: 1;
+}
+/*上传进度条*/
+.upload-progress-area{
+  height: 50px;
+  display: flex;
+  font-size: 14px;
+}
+
+.progress-bar-area{
+  height: 50px;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+.progress-bar{
+  height: 3px;
+  background-color: #00AEEC;
+}
+.progress-bar-inner{
+  height: 3px;
+  background-color: red;
+}
+
+/**控制暂停恢复*/
+.uploading-controller-area{
+  float: right;
+  display: flex;
+}
+.uploading-controller-area>button{
+  margin-right: 10px;
+  width: 100px;
+  height: 20px;
+  background-color: #00AEEC;
+  color: white;
+  border-width: 0px;
+}
+
+.uploading-controller-area>button:active{
+
+  background-color: coral;
+}
+
+/*视频参数配置*/
+.video-setting-area{
+  margin-top: 50px;
+
+}
+
+
+
+/*表单元素间隔*/
+.el-form-item{
+  margin-bottom: 50px;
+}
+/*tag*/
+
+
+/*图片上传*/
+/*封面上传*/
+.avatar-uploader {
+  border: 1px dashed #1f72ba;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+}
+.avatar-uploader :hover {
+  border-color: #409EFF;
+}
+
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+
+.upload-icon{
+  width: 50px;
+  margin-top: 54px;
+}
 </style>

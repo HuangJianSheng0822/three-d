@@ -47,7 +47,7 @@ function getUserInfo(userId){
       });
 }
 function getVideoInfo(id){
-  axios.post("www"+id)
+  axios.post("http://localhost:8080/video/"+id)
       .then((res)=>{
         userInfo.value=res.data.data
       })
