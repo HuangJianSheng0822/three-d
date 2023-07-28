@@ -47,8 +47,6 @@ const fatherData=defineProps({
     required:false
   }
 })
-
-console.log(fatherData.items[1])
 </script>
 <style scoped>
 .feed-card {

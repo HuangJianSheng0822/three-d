@@ -6,10 +6,10 @@
   <div class="main">
     <div class="main-left">
       <div class="info">
-        <playing-title></playing-title>
+        <playing-title :video-info="videoInfo"></playing-title>
       </div>
       <div class="playing">
-        <playing-box></playing-box>
+        <playing-box :video-info="videoInfo"></playing-box>
       </div>
       <div class="comment-area">
         <comment-box></comment-box>
@@ -32,11 +32,12 @@ import {ref} from "vue";
 const route=useRoute()
 const id=route.params.id
 const userId=route.params.userId
+const userInfo=ref(null)
+const videoInfo=ref(null)
+//根据id获取视频标题信息
+//根据id获取视频信息
 getUserInfo(userId)
 getVideoInfo(id);
-//根据id获取视频标题信息
-const userInfo=ref(null)
-//根据id获取视频信息
 function getUserInfo(userId){
   axios.get("http://localhost:8080/users/"+userId)
       .then((res)=>{
@@ -49,7 +50,7 @@ function getUserInfo(userId){
 function getVideoInfo(id){
   axios.post("http://localhost:8080/video/"+id)
       .then((res)=>{
-        userInfo.value=res.data.data
+        videoInfo.value=res.data.data
       })
       .catch(error => {
         console.error(error);

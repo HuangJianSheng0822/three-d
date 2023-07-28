@@ -1,6 +1,6 @@
 <template>
   <div class="video-info-con">
-    <h2>{{ playingTitleInfo.videoTitle }}</h2>
+    <h2>{{ fatherData.videoInfo.title }}</h2>
     <div class="video-info-def-list">
       <span title="总播放数量">
         <svg class="view-icon" style="width:20px;height:20px;" data-v-d65df5d6=""
@@ -11,7 +11,7 @@
             d="M12.23275 9.1962C12.851516666666667 9.553483333333332 12.851516666666667 10.44665 12.232683333333332 10.803866666666666L9.57975 12.335600000000001C8.960983333333335 12.692816666666667 8.1875 12.246250000000002 8.187503333333334 11.531733333333333L8.187503333333334 8.4684C8.187503333333334 7.753871666666667 8.960983333333335 7.307296666666667 9.57975 7.66456L12.23275 9.1962z"
             fill="currentColor"></path>
         </svg>
-        <span>{{playingTitleInfo.totalViews }}</span>
+        <span>{{fatherData.videoInfo.playback }}</span>
       </span>
       <span title="历史累计弹幕数">
         <svg class="dm-icon" style="width:20px;height:20px;" data-v-d65df5d6=""
@@ -28,10 +28,10 @@
             d="M7.750000000000001 11.666666666666668C7.750000000000001 11.942783333333333 7.526140000000001 12.166666666666666 7.25 12.166666666666666L6.708333333333334 12.166666666666666C6.432193333333334 12.166666666666666 6.208333333333334 11.942783333333333 6.208333333333334 11.666666666666668C6.208333333333334 11.390550000000001 6.432193333333334 11.166666666666668 6.708333333333334 11.166666666666668L7.25 11.166666666666668C7.526140000000001 11.166666666666668 7.750000000000001 11.390550000000001 7.750000000000001 11.666666666666668z"
             fill="currentColor"></path>
         </svg>
-        <span>{{playingTitleInfo.totalBarrage }}</span>
+        <span>1</span>
       </span>
       <span title="发布时间">
-        <span>{{playingTitleInfo.publishTime }}</span>
+        <span>{{fatherData.videoInfo.created }}</span>
       </span>
     </div>
 
@@ -39,14 +39,14 @@
 </template>
 
 <script setup>
-import {ref} from "vue";
-
-const playingTitleInfo=ref({
-  "videoTitle":"111",
-  "totalViews":123,
-  "totalBarrage":1111,
-  "publishTime":"23-3-3"
+import {defineProps} from "vue";
+const fatherData=defineProps({
+  videoInfo:{
+    type:Object,
+    required:false
+  }
 })
+console.log(fatherData.videoInfo)
 </script>
 <style scoped>
 
