@@ -36,13 +36,30 @@ const fatherData=defineProps({
   }
 })
 
-//页面改变
-const currentChange=(page)=>{
-  axios.post(`http://localhost:8080/content/list?page=`+page+"&size="+fatherData.page_size).then(res => {
-    console.log(res.data.code)
+initData()
+function initData(){
+  const params={
+    "page":0,
+    "size":fatherData.page_size
+  }
+  axios.post(`http://localhost:8080/video/list`,params).then(res => {
     emit('page_data', res.data)
   })
 }
+
+
+//页面改变
+
+const currentChange=(page)=>{
+  const params={
+    "page":page,
+    "size":fatherData.page_size
+  }
+  axios.post(`http://localhost:8080/video/list`,params).then(res => {
+    emit('page_data', res.data)
+  })
+}
+
 
 </script>
 

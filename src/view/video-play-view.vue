@@ -12,10 +12,11 @@
         <playing-box :video-info="videoInfo"></playing-box>
       </div>
       <div class="comment-area">
-        <comment-box></comment-box>
+        <comment-view></comment-view>
       </div>
     </div>
     <div class="main-right">
+      <user-card :user-info="userInfo"></user-card>
     </div>
   </div>
 
@@ -24,16 +25,29 @@
 <script setup>
 import PlayingTitle from "@/components/playing-title.vue";
 import PlayingBox from "@/components/playing-box.vue";
-import CommentBox from "@/components/comment-box.vue";
+import CommentView from "@/components/comment-view.vue";
 import HomeTopBar from "@/components/home-top-bar.vue";
+import UserCard from "@/components/user-card.vue";
 import {useRoute} from "vue-router";
 import axios from "axios";
 import {ref} from "vue";
 const route=useRoute()
 const id=route.params.id
 const userId=route.params.userId
-const userInfo=ref(null)
-const videoInfo=ref(null)
+const userInfo=ref({
+  name:'',
+  headImg:'',
+  desc:''
+})
+const videoInfo=ref({
+  title: "",
+  playUrl: "",
+  type: null,
+  tags: "[]",
+  description: "dd",
+  created: "2023-07-27T13:38:56.000+00:00",
+  playback: 0
+})
 //根据id获取视频标题信息
 //根据id获取视频信息
 getUserInfo(userId)
@@ -63,7 +77,7 @@ function getVideoInfo(id){
   height: 50px;
 }
 .main {
-  margin-top: 70px;
+  margin-top: 20px;
   display: flex;
   padding: 0 10%;
 }
@@ -81,6 +95,9 @@ function getVideoInfo(id){
   flex: 1;
   flex-direction: column;
   min-width: 300px;
+}
+.info{
+  height: 85px;
 }
 
 .comment-area{

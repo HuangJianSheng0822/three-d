@@ -55,7 +55,7 @@
 <script setup>
   import {ref} from "vue";
 
-  const avatarUrl=ref('@/assets/img/head.jpg')
+  const avatarUrl=ref('https://p.qqan.com/up/2021-6/16239805423883054.jpg')
   const userId=ref('User123')
   const isHovered=ref(false)
   const handleMouseOver=()=>{

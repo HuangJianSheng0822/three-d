@@ -359,7 +359,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           console.log("jwt:"+localStorage.getItem("jwt"));
-          axios.post('http://localhost:8080/content/add', this.form,{
+          axios.post('http://localhost:8080/video/add', this.form,{
             headers: {
               'Authorization': localStorage.getItem("jwt")
             }

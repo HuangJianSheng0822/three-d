@@ -46,8 +46,35 @@ const fatherData=defineProps({
     required:false
   }
 })
-console.log(fatherData.videoInfo)
 </script>
 <style scoped>
+
+.video-info-con>h2 {
+  font-size: 20px;
+  font-family: PingFang SC, HarmonyOS_Regular, Helvetica Neue, Microsoft YaHei, sans-serif;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  color: #18191C;
+  line-height: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+
+.video-info-def-list {
+  display: flex;
+}
+
+.video-info-def-list>span>*,.video-info-def-list>* {
+  font-size: 13px;
+  height: 100%;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  line-height: 24px;
+  color: #9499a0;
+}
 
 </style>

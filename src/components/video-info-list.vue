@@ -1,7 +1,6 @@
 
   <template>
     <div class="main">
-
       <div v-for="(item,index) in fatherData.items" :key="index">
         <div class="feed-card">
           <div class="video-card">
@@ -29,7 +28,7 @@
                   fill="currentColor"></path>
               <!--]-->
             </svg>
-            <span class="userinfo"><a :href="'https://www.catchstar.top?userid='+item.userId">{{item.userName}}</a>>{{item.created}}</span>
+            <span class="userinfo"><a :href="'https://www.catchstar.top?userid='+item.userId">{{item.userName}}</a> {{item.created}}</span>
 
           </div>
         </div>
