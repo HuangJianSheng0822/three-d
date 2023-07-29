@@ -3,7 +3,12 @@
     <div class="play">
       <video :src="fatherData.videoInfo.playUrl" controls></video>
     </div>
-    <div class="video-bar"></div>
+    <div class="video-bar">
+      <div>
+        <input type="text">
+        <button type="button" @sendBarrage="sendBarrage(fatherData.videoInfo.id)">发送</button>
+      </div>
+    </div>
     <div class="video-desc">{{ fatherData.videoInfo.description }}</div>
     <div class="video-tags">
       <div v-for="tag in fatherData.videoInfo.tags" :key="tag" class="tag" @mouseover="handleMouseOver(tag)" @mouseleave="handleMouseLeave(tag)">
@@ -15,14 +20,17 @@
 
 <script setup>
 import {defineProps} from "vue";
-
+console.log("init:"+fatherData.videoInfo.tags)
 const fatherData=defineProps({
   videoInfo:{
     type:Object,
     required:false
   }
 })
-console.log(fatherData.videoInfo.tags)
+
+const sendBarrage=(id)=>{
+  console.log(id)
+}
 // eslint-disable-next-line no-unused-vars
 const handleMouseOver = (tag) => {
   // Handle mouseover event, change the tag's style here if needed
@@ -52,8 +60,7 @@ const handleMouseLeave = (tag) => {
 }
 
 .video-desc {
-  height: 100px;
-  background-color: #ccc;
+  margin: 10px 0;
 }
 
 .video-tags {

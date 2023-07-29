@@ -12,7 +12,7 @@
         <playing-box :video-info="videoInfo"></playing-box>
       </div>
       <div class="comment-area">
-        <comment-view></comment-view>
+        <comment-view :root-comment="rootComment"></comment-view>
       </div>
     </div>
     <div class="main-right">
@@ -40,18 +40,45 @@ const userInfo=ref({
   desc:''
 })
 const videoInfo=ref({
+  id:"",
   title: "",
   playUrl: "",
   type: null,
-  tags: "[]",
+  tags: "",
   description: "dd",
   created: "2023-07-27T13:38:56.000+00:00",
   playback: 0
 })
+const rootComment = ref([
+  {
+    id: "",
+    userId: "",
+    headImg: "",
+    userName: "",
+    content: "",
+    created: "",
+    likeCount:0,
+    childCommentCount: 0,
+    childComments: [
+      {
+        id: "",
+        userId: "",
+        headImg: "",
+        userName: "",
+        toUserId: "",
+        toUserName: "",
+        content: "",
+        created: "",
+        likeCount:0
+      }
+    ]
+  }
+]);
 //根据id获取视频标题信息
 //根据id获取视频信息
 getUserInfo(userId)
 getVideoInfo(id);
+getRootComment();
 function getUserInfo(userId){
   axios.get("http://localhost:8080/users/"+userId)
       .then((res)=>{
@@ -65,6 +92,15 @@ function getVideoInfo(id){
   axios.post("http://localhost:8080/video/"+id)
       .then((res)=>{
         videoInfo.value=res.data.data
+      })
+      .catch(error => {
+        console.error(error);
+      });
+}
+function getRootComment(){
+  axios.post("http://localhost:8080/comment/1679164416563617793")
+      .then((res)=>{
+        rootComment.value=res.data.data
       })
       .catch(error => {
         console.error(error);
