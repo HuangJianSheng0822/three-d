@@ -30,7 +30,7 @@
             <a href="#">About</a>
             <a href="#">Services</a>
             <a href="#">Contact</a>
-            <router-link to="content">投稿</router-link>
+            <router-link to="/content">投稿</router-link>
           </div>
         </div>
       </div>

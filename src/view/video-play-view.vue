@@ -1,24 +1,27 @@
 <template>
-  <div class="top">
-    <home-top-bar></home-top-bar>
+  <div class="root">
+    <div class="top">
+      <home-top-bar></home-top-bar>
+    </div>
+
+    <div class="main">
+      <div class="main-left">
+        <div class="info">
+          <playing-title :video-info="videoInfo"></playing-title>
+        </div>
+        <div class="playing">
+          <playing-box :video-info="videoInfo" :id="id"></playing-box>
+        </div>
+        <div class="comment-area">
+          <comment-view :root-comment="rootComment"></comment-view>
+        </div>
+      </div>
+      <div class="main-right">
+        <user-card :user-info="userInfo"></user-card>
+      </div>
+    </div>
   </div>
 
-  <div class="main">
-    <div class="main-left">
-      <div class="info">
-        <playing-title :video-info="videoInfo"></playing-title>
-      </div>
-      <div class="playing">
-        <playing-box :video-info="videoInfo"></playing-box>
-      </div>
-      <div class="comment-area">
-        <comment-view :root-comment="rootComment"></comment-view>
-      </div>
-    </div>
-    <div class="main-right">
-      <user-card :user-info="userInfo"></user-card>
-    </div>
-  </div>
 
 </template>
 
@@ -106,11 +109,13 @@ function getRootComment(){
         console.error(error);
       });
 }
+
 </script>
 
 <style scoped>
 .top{
   height: 50px;
+
 }
 .main {
   margin-top: 20px;
@@ -140,4 +145,5 @@ function getRootComment(){
 
 
 }
+
 </style>
