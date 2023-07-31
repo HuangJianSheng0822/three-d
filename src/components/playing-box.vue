@@ -1,5 +1,7 @@
 <script setup>
 import {defineProps, onMounted, ref} from "vue";
+const videoPlayerRef = ref(null);
+
 const fatherData=defineProps({
   videoInfo:{
     type:Object,
@@ -16,14 +18,14 @@ const texts = ref([]);
 const nowColor = ref('#FF0000');
 
 const barrageData=ref({
-  "userId":"userId",
-  "videoId":"videoId",
+  "userId":"",
+  "videoId":"",
   "content":"",
-  "schedule":"11:1"
+  "schedule":""
 })
 
 const update = () => {
-  ctx.value.clearRect(0, 0, 500, 200);
+  ctx.value.clearRect(0, 0, 500, 100);
   for (let i = 0; i < texts.value.length; i++) {
     texts.value[i].x -= 1;
     if (texts.value[i].x < -500) texts.value.splice(i, 1);
@@ -38,10 +40,8 @@ const update = () => {
   window.requestAnimationFrame(update);
 };
 
-const addText = () => {
-  const nowTxt = barrageData.value.content
+const addText = (nowTxt) => {
   if (nowTxt !== '') {
-    barrageData.value.content = '';
     texts.value.push({
       txt: nowTxt,
       x: canvas.value.width,
@@ -53,7 +53,7 @@ const addText = () => {
 };
 onMounted(() => {
   canvas.value.width = 500;
-  canvas.value.height = 200;
+  canvas.value.height = 100;
   ctx.value = canvas.value.getContext('2d');
   update();
 });
@@ -66,6 +66,7 @@ webSocket.onmessage = (event) => {
   // 在控制台打印响应结果
   console.log("Response:", event.data);
   console.log("有新消息")
+  addText(event.data)
 };
 webSocket.onopen = function() {
   console.log("ws调用连接成功回调方法")
@@ -73,12 +74,22 @@ webSocket.onopen = function() {
 }
 
 const sendBarrage=()=>{
+  const videoPlayer = videoPlayerRef.value;
+  const currentTime = videoPlayer.currentTime;
+  const minutes = Math.floor(currentTime / 60);
+  const seconds = Math.floor(currentTime % 60);
+  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
   // 将barrageData数据转换为JSON字符串
   barrageData.value.videoId=fatherData.id;
+  barrageData.value.userId=localStorage.getItem("jwt");
+  barrageData.value.schedule=formattedTime
   const dataToSend = JSON.stringify(barrageData.value);
-    webSocket.send(dataToSend);
+  webSocket.send(dataToSend);
 }
-
+onMounted(() => {
+  videoPlayerRef.value = document.querySelector('video');
+});
 // eslint-disable-next-line no-unused-vars
 const handleMouseOver = (tag) => {
   // Handle mouseover event, change the tag's style here if needed
@@ -93,16 +104,15 @@ const handleMouseLeave = (tag) => {
 <template>
   <div>
     <div class="play">
-      <div>{{fatherData.videoInfo.id}}</div>
       <div class="video-wrapper">
-        <video src="../assets/name1.mp4" controls></video>
         <canvas ref="canvas"></canvas>
+        <video ref="videoPlayer" src="../assets/name1.mp4" controls></video>
       </div>
     </div>
     <div class="video-bar">
-      <div>
-        <input type="text" v-model="barrageData.content" @keydown.enter="addText">
-        <button type="button" @click="sendBarrage()">发送</button>
+      <div class="barrage-box">
+        <input type="text" v-model="barrageData.content" @keydown.enter="sendBarrage" class="barrage-input">
+        <button type="button" @click="sendBarrage()" class="barrage-sub-btn">发送</button>
       </div>
     </div>
     <div class="video-desc">{{ fatherData.videoInfo.description }}</div>
@@ -119,11 +129,13 @@ const handleMouseLeave = (tag) => {
 
 .play,canvas {
   width: 100%;
-  height: 80%;;
+  height: 80%;
 }
 .video-wrapper {
   position: relative;
-  height: 500px;
+  height:100%;
+  min-height: 500px;
+  z-index: 999;
 }
 .video-wrapper video
 {
@@ -133,11 +145,13 @@ const handleMouseLeave = (tag) => {
   width: 100%;
   height: 100%;
 }
-.video-wrapper canvas{
-  height: 80%;
+canvas{
+  height: 37%;
   z-index: 1;
 }
-
+video{
+  object-fit: fill;
+}
 .video-bar {
   height: 57px;
   background-color: antiquewhite;
@@ -166,5 +180,31 @@ const handleMouseLeave = (tag) => {
 }
 video{
   z-index: -1;
+  //pointer-events: none; /* 让元素A不响应事件 */
+}
+.barrage-input{
+  height: 28px;
+}
+.barrage-sub-btn{
+  width: 62px;
+  height: 32px;
+  background-color: #00A1D6;
+  color: white;
+  font-size: 13px;
+  padding: 13px;
+  border-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.barrage-box{
+  display: flex;
+
+}
+.video-bar{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 20px;
 }
 </style>

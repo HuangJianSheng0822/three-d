@@ -10,6 +10,8 @@ import HomeView from "@/view/home-view.vue";
 import VideoPlayView from "@/view/video-play-view.vue";
 import UploadContent from "@/view/upload-content.vue";
 import VideoUpload from "@/components/video-upload.vue";
+import CreateInfo from "@/components/create-info.vue";
+import VideoManage from "@/components/video-manage.vue";
 const routes = [
     {
         path: "/login",
@@ -38,6 +40,16 @@ const routes = [
                 path: '/video-upload',
                 name: 'video-upload',
                 component: VideoUpload
+            },
+            {
+                path: '/create-info',
+                name: 'create-info',
+                component: CreateInfo
+            },
+            {
+                path: "/video-manage",
+                name: "video-manage",
+                component: VideoManage
             }
         ]
     },

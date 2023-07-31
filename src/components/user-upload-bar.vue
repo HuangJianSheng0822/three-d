@@ -1,17 +1,31 @@
 <template>
   <div class="left-nav-component">
-    <div class="button">投稿</div>
-    <ul class="nav-list">
-      <li class="nav-item">
-        <router-link to="to"><img src="../assets/ico/home.png"> 首页</router-link>
-      </li>
-      <li class="nav-item">
-        <img src="../assets/ico/history.png"> 内容管理
-      </li>
-      <li class="nav-item">
-        <img src="../assets/ico/setting.png"> 创作设置
-      </li>
-    </ul>
+    <router-link to="/video-upload">
+      <div class="button">投稿</div>
+    </router-link>
+
+    <div class="nav-list">
+      <router-link to="/create-info">
+        <div class="li-item">
+          <div class="ico"><img src="../assets/ico/home.png"></div>
+          <div>首页</div>
+        </div>
+      </router-link>
+      <router-link to="/video-manage">
+        <div class="li-item">
+          <div class="ico"><img src="../assets/ico/home.png"></div>
+          <div>投稿管理</div>
+        </div>
+      </router-link>
+
+      <router-link to="">
+        <div class="li-item">
+          <div class="ico"><img src="../assets/ico/home.png"></div>
+          <div>其他</div>
+        </div>
+      </router-link>
+
+    </div>
   </div>
 </template>
 
@@ -21,11 +35,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .left-nav-component {
   width: 200px;
   min-width: 200px;
-  padding: 0px 0px;
+  padding: 0 0;
   background-color: #f5f5f5;
 }
 
@@ -33,7 +47,6 @@ export default {
   background-color: #00A1D6;
   color: #ffffff;
   padding: 10px;
-  border-radius: 4px;
   margin-bottom: 20px;
   width: 136px;
   height: 30px;
@@ -42,23 +55,51 @@ export default {
   line-height: 30px;
   margin-top: 24px;
 }
-
-.nav-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  padding-top: 10px;
-  font-size: 14px;
+.nav-list{
+  width: 136px;
 }
-
-.nav-item {
+.li-item{
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
-
+  height: 30px;
+  margin-bottom: 5px;
 }
-.nav-item>img{
-  margin-right: 15px;
+.li-item>img{
+  width: 100%;
+  height: 100%;
 }
-
+li{
+  width: 136px;
+  height: 30px;
+  list-style-type: none;
+  color: #9499a0;
+  line-height: 30px;
+}
+.ico{
+  height: 20px;
+  margin-right: 20px;
+}
+/*包含以下四种的链接*/
+a {
+  text-decoration: none;
+}
+/*正常的未被访问过的链接*/
+a:link {
+  text-decoration: none;
+}
+/*已经访问过的链接*/
+a:visited {
+  text-decoration: none;
+}
+/*鼠标划过(停留)的链接*/
+a:hover {
+  text-decoration: none;
+}
+/* 正在点击的链接*/
+a:active {
+  text-decoration: none;
+}
+a{
+  color: #9499a0;
+}
 </style>

@@ -17,7 +17,15 @@
         </div>
       </div>
       <div class="main-right">
-        <user-card :user-info="userInfo"></user-card>
+        <div class="author-info-container">
+          <user-card :user-info="userInfo"></user-card>
+        </div>
+        <div class="bui-area">
+          <barrage-list :id="id"></barrage-list>
+        </div>
+        <div class="next-list">
+          <recommend-list></recommend-list>
+        </div>
       </div>
     </div>
   </div>
@@ -31,9 +39,11 @@ import PlayingBox from "@/components/playing-box.vue";
 import CommentView from "@/components/comment-view.vue";
 import HomeTopBar from "@/components/home-top-bar.vue";
 import UserCard from "@/components/user-card.vue";
+import BarrageList from "@/components/barrage-list.vue";
 import {useRoute} from "vue-router";
 import axios from "axios";
 import {ref} from "vue";
+import RecommendList from "@/components/recommend-list.vue";
 const route=useRoute()
 const id=route.params.id
 const userId=route.params.userId
@@ -127,7 +137,7 @@ function getRootComment(){
   display: flex;
   flex-direction: column;
   width: 75%;
-  min-width: 800px;
+  min-width: 888px;
   margin-right: 2%;
 }
 
@@ -145,5 +155,15 @@ function getRootComment(){
 
 
 }
+.author-info-container {
+  background-color: antiquewhite;
+  height: 104px;
+}
+.bui-area {
+}
+.next-list{
+  flex: 1;
+}
+
 
 </style>
