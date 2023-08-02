@@ -12,7 +12,6 @@
       <div class="right">
         <!-- 右侧内容区域 -->
         <router-view></router-view>
-
       </div>
     </div>
   </div>

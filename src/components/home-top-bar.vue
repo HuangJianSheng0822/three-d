@@ -3,7 +3,7 @@
     <div class="content">
       <div class="nav">
         <div class="navbar">
-          <a href="#">Home</a>
+          <router-link to="/home">首页</router-link>
           <a href="#">About</a>
           <a href="#">Services</a>
           <a href="#">Contact</a>
@@ -28,7 +28,7 @@
             <router-link to="/upload"></router-link>
             <a href="">Home</a>
             <a href="#">About</a>
-            <a href="#">Services</a>
+            <router-link to="/favlist">收藏</router-link>
             <a href="#">Contact</a>
             <router-link to="/content">投稿</router-link>
           </div>

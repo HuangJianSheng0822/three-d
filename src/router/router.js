@@ -12,6 +12,11 @@ import UploadContent from "@/view/upload-content.vue";
 import VideoUpload from "@/components/video-upload.vue";
 import CreateInfo from "@/components/create-info.vue";
 import VideoManage from "@/components/video-manage.vue";
+import AccHome from "@/view/account/acc-home.vue";
+import AccountView from "@/view/account-view.vue";
+import AccSetting from "@/view/account/acc-setting.vue";
+import AccFace from "@/view/account/acc-face.vue";
+import FavListView from "@/view/fav-list-view.vue";
 const routes = [
     {
         path: "/login",
@@ -29,6 +34,11 @@ const routes = [
         path: "/playing/:id/:userId",
         name: "playing",
         component:VideoPlayView
+    },
+    {
+        path: '/favlist',
+        name: 'favlist',
+        component: FavListView
     },
     {
         path: "/content",
@@ -50,6 +60,29 @@ const routes = [
                 path: "/video-manage",
                 name: "video-manage",
                 component: VideoManage
+            }
+        ]
+    },
+    {
+        path:"/account",
+        name: "account",
+        component: AccountView,
+        redirect: "/acc-home",
+        children: [
+            {
+                path: "/acc-home",
+                name: "acc-home",
+                component: AccHome
+            },
+            {
+                path: "/acc-setting",
+                name: "acc-setting",
+                component: AccSetting
+            },
+            {
+                path: "/acc-face",
+                name: "acc-face",
+                component: AccFace
             }
         ]
     },

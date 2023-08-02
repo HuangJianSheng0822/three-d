@@ -16,7 +16,7 @@
                 <div class="li-box">
                   <div class="li-content">
                     <img src="../assets/ico/home.png" style="width: 20px">
-                    <span class="text"><router-link to="/account">个人中心</router-link></span>
+                    <router-link to="/account"><span class="text">个人中心</span></router-link>
                   </div>
                   <img src="../assets/ico/to-right.png" style="width: 20px;float: right">
                 </div>
