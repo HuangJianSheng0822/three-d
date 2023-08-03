@@ -49,10 +49,10 @@ const fatherData=defineProps({
 </script>
 <style scoped>
 .feed-card {
-  width: 334px;
-  height: 263px;
+  width: 300px;
+  height: auto;
+  max-width: 334px;
   min-width: 217px;
-  border-color: rebeccapurple;
   margin: 20px 10px;
 }
 
@@ -95,11 +95,11 @@ a:hover {
 }
 
 .main {
-  min-width: 1100px;
   display: flex;
+  width: 85%;
   flex-wrap: wrap;
-  justify-content: left;
-  padding: 0 200px;
+  min-width: 1300px;
+  justify-content: space-between;
 }
 
 a{

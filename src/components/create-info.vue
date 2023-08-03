@@ -35,7 +35,7 @@ import LikesData from "@/components/likes-data.vue";
   margin-bottom: 20px;
 }
 .activity-box{
-  height: 200px;
+  height: auto;
   display: flex;
   margin-bottom: 20px;
 }
