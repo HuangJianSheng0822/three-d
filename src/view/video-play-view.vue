@@ -13,7 +13,7 @@
           <playing-box :video-info="videoInfo" :id="id"></playing-box>
         </div>
         <div class="comment-area">
-          <comment-view :root-comment="rootComment"></comment-view>
+          <comment-view :id="id"></comment-view>
         </div>
       </div>
       <div class="main-right">
@@ -41,9 +41,10 @@ import HomeTopBar from "@/components/home-top-bar.vue";
 import UserCard from "@/components/user-card.vue";
 import BarrageList from "@/components/barrage-list.vue";
 import {useRoute} from "vue-router";
-import axios from "axios";
 import {ref} from "vue";
 import RecommendList from "@/components/recommend-list.vue";
+import {getUserInfoApi} from "@/api/user";
+import {getVideoInfoApi} from "@/api/video";
 const route=useRoute()
 const id=route.params.id
 const userId=route.params.userId
@@ -62,38 +63,12 @@ const videoInfo=ref({
   created: "2023-07-27T13:38:56.000+00:00",
   playback: 0
 })
-const rootComment = ref([
-  {
-    id: "",
-    userId: "",
-    headImg: "",
-    userName: "",
-    content: "",
-    created: "",
-    likeCount:0,
-    childCommentCount: 0,
-    childComments: [
-      {
-        id: "",
-        userId: "",
-        headImg: "",
-        userName: "",
-        toUserId: "",
-        toUserName: "",
-        content: "",
-        created: "",
-        likeCount:0
-      }
-    ]
-  }
-]);
 //根据id获取视频标题信息
 //根据id获取视频信息
 getUserInfo(userId)
 getVideoInfo(id);
-getRootComment();
 function getUserInfo(userId){
-  axios.get("http://localhost:8080/users/"+userId)
+  getUserInfoApi(userId)
       .then((res)=>{
         userInfo.value=res.data.data
       })
@@ -102,7 +77,7 @@ function getUserInfo(userId){
       });
 }
 function getVideoInfo(id){
-  axios.post("http://localhost:8080/video/"+id)
+      getVideoInfoApi(id)
       .then((res)=>{
         videoInfo.value=res.data.data
       })
@@ -110,15 +85,7 @@ function getVideoInfo(id){
         console.error(error);
       });
 }
-function getRootComment(){
-  axios.post("http://localhost:8080/comment/1679164416563617793")
-      .then((res)=>{
-        rootComment.value=res.data.data
-      })
-      .catch(error => {
-        console.error(error);
-      });
-}
+
 
 </script>
 

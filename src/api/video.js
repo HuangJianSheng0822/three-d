@@ -1,11 +1,10 @@
 import axios from "axios";
-axios.defaults.baseURL='http://localhost:8080';
 function getVideoCoverList(page,size){
-    const params={
-        page:page,
-        size:size
-    }
-    return axios.post('/video/list',params)
+
+    return axios.get('/video/'+page+"/"+size);
 }
 
-export {getVideoCoverList}
+function getVideoInfoApi(id){
+    return axios.post("/video/"+id)
+}
+export {getVideoCoverList,getVideoInfoApi}

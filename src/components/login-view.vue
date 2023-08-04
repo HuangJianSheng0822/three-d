@@ -41,9 +41,8 @@
 <script setup>
 
 import {ref} from "vue";
-import axios from "axios";
 import {useRouter} from "vue-router";
-
+import {login} from "@/api/user";
 const router = useRouter();
 const login_form=ref({
   email:'',
@@ -62,12 +61,11 @@ const rules=ref({
 const submitForm=()=>{
   login_ref.value.validate(valid => {
     if (valid) {
-      // 发送POST请求到登录路径
-      axios.post('http://localhost:8080/users/login', login_form.value)
+      login(login_form.value)
           .then(response => {
             // 登录成功，重定向到新页面
-            if (!response.data.data=='') {
-              localStorage.setItem("jwt",response.data.data.token)
+            if (response.data.data.is) {
+              localStorage.setItem("token",response.data.data.token)
               router.push('/home');
             } else {
               // 登录失败，弹窗提示

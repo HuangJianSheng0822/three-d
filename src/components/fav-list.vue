@@ -8,14 +8,6 @@
           </template>
           <div>
             <el-form ref="addFormRef" v-model="typeData" :rules="rules" size="medium" label-width="100px" label-position="left">
-
-              <!--
-               <el-form-item label="收藏夹封面" prop="coverUrl">
-                <el-upload ref="coverUrl" v-model="coverUrlfileList" :action="coverUrlAction" :before-upload="coverUrlBeforeUpload" accept="image/*">
-                  <el-button size="small" type="primary" icon="el-icon-upload">点击上传</el-button>
-                </el-upload>
-              </el-form-item>
-              -->
               <upload-images @img-upload="getImgUrl"  :title="'封面'"></upload-images>
               <el-form-item label="收藏夹名称" prop="name">
                 <el-input v-model="typeData.name" placeholder="请输入收藏夹名称" :maxlength="20" show-word-limit clearable style="width: 100%"></el-input>
@@ -53,7 +45,7 @@
 
 <script setup>
 import {ref} from 'vue';
-import {getCollectList,addCollect} from "@/api/collect";
+import {getCollectListApi,addCollect} from "@/api/collect";
 import UploadImages from "@/components/upload-images.vue";
 const activeIndex = ref(0); // 默认选中第一个
 
@@ -66,7 +58,13 @@ const lists=ref(["1","2"]);
 const types=ref([])
 
 const initTypes=async ()=>{
-  types.value=await getCollectList();
+  getCollectListApi()
+      .then((res)=>{
+        types.value= res.data.data
+      })
+      .catch(err=>{
+        console.log(err)
+      })
 
 }
 initTypes()

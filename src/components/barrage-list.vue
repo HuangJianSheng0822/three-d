@@ -1,6 +1,6 @@
 <script setup>
 import {defineProps,ref} from "vue";
-import axios from "axios";
+import {getBarrageListApi} from "@/api/barrage";
 
 function toggleDropdown() {
   const dropdown = document.querySelector('.dropdown');
@@ -13,7 +13,7 @@ const fatherData=defineProps({
   }
 })
 const barrageList=ref([])
-axios.get(`http://localhost:8080/barr/${fatherData.id}`)
+    getBarrageListApi(fatherData.id)
     .then((res)=>{
       barrageList.value=res.data.data
     })

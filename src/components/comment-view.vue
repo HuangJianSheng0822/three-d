@@ -1,11 +1,10 @@
 <template>
-  <div v-for="(item,index) in parentData.rootComment" :key="index">
+  <div v-for="(item,index) in rootCommentList" :key="index">
     <div class="comment">
       <div class="avatar">
         <img :src="item.headImg">
       </div>
       <div class="comment-content">
-
         <div class="comment-root-area">
           <div class="user-info">
             <span class="username" style="color: #FB7299;font-size: 14px;font-weight: 500">{{item.userName}}</span>
@@ -19,17 +18,15 @@
             <div class="comment-like">
               {{item.likeCount}}
             </div>
-            <div class="comment-like" @click="toggleReplyInput(item.id,item.userName)">
+            <div class="comment-like" @click="toggleReplyInput(index,item.id,item.userName)">
               回复
             </div>
           </div>
         </div>
-
         <div class="comment-tag">
           热评
         </div>
-
-        <div v-for="(childItem,index) in item.childComments" :key="index">
+        <div v-for="(childItem,childIndex) in item.childComments" :key="childIndex">
           <div>
             <div class="comment-children-area">
               <div class="avatar">
@@ -53,7 +50,7 @@
                     <div class="comment-like">
                       {{childItem.likeCount}}
                     </div>
-                    <div class="comment-like" @click="toggleReplyInput(childItem.id,childItem.userName)">
+                    <div class="comment-like" @click="toggleReplyInput(index,childItem.id,childItem.userName)">
                       回复
                     </div>
                   </div>
@@ -65,12 +62,20 @@
         <div v-if="item.childCommentCount > 3">
           <div>
             <div @click="showMore(item.id,$event)"><span>共{{item.childCommentCount}}条回复，</span><span>点击查看</span></div>
+            <div v-if="replyStates[item.id] &&item.childCommentCount>5">
+              <el-pagination
+                  small
+                  layout="prev, pager, next"
+                  :total="50"
+                  :page-size="pageReqData.page_size"
+                  :page-count="pageReqData.page_count"
+                  @current-change="currentChange($event,item.id)">
+              </el-pagination>
+            </div>
           </div>
         </div>
 
-
-        <!--回复框-->
-        <div class="reply-com" v-if="showReplyBox">
+        <div class="reply-com" :class="{active:activeIndex===index}">
           <reply-comment></reply-comment>
         </div>
       </div>
@@ -81,38 +86,88 @@
 
 <script setup>
 //import axios from 'axios';
-import {defineProps, ref} from "vue";
+import {defineProps, ref, reactive} from "vue";
 import axios from "axios";
 import ReplyComment from "@/components/reply-comment.vue";
+import {getRootCommentApi} from "@/api/comment";
 
-const showReplyBox=ref(false);
+
+const pageReqData=ref({
+  page_size:10,
+  page_count:10
+})
+
 //const rootComment=ref('');
 const parentData=defineProps({
-  rootComment:{
-    type:Object,
+  id:{
+    type:String,
     required:false
   }
 })
+
+const rootCommentList=ref([])
+getRootComment()
+function getRootComment(){
+  console.log(parentData.id)
+  getRootCommentApi(parentData.id)
+      .then((res)=>{
+        rootCommentList.value=res.data.data
+      })
+      .catch(error => {
+        console.error(error);
+      });
+}
+
+const currentChange=(page,rootId)=>{
+  console.log("page:"+page+"rootID:"+rootId)
+  console.log(rootCommentList.value)
+  // eslint-disable-next-line no-unused-vars
+  const data=[
+    {
+      "id": "13",
+      "userId": "新增",
+      "headImg": "https://p.qqan.com/up/2021-6/16239805423883054.jpg",
+      "userName": "新增",
+      "content": "根评论1的子评论1的子评论1",
+      "created": "23-07-29 12:22",
+      "toUserId": "4",
+      "toUserName": "4",
+      "likeCount": 2
+    }
+  ]
+  rootCommentList.value.forEach(e=>{
+    if (e.id===rootId){
+      console.log("e:"+e.id+" rootid:"+rootId)
+      e.childComments=data
+    }
+  })
+  console.log(rootCommentList.value)
+
+}
 // eslint-disable-next-line no-unused-vars
 
-const toggleReplyInput=(userId,userName)=> {
-
-  showReplyBox.value=true;
-  console.log("item:"+userId+"==>"+userName)
+const toggleReplyInput=(index,userId,userName)=> {
+  if (index===activeIndex.value){
+    changeActive(-1)
+    return
+  }
+  changeActive(index)
+  console.log("index:"+index+"ac:"+activeIndex.value+" "+userId+"userName:"+userName)
 }
 
 // eslint-disable-next-line no-unused-vars
 const showMore=(rootId,event)=>{
-
+  replyStates[rootId] = true;
   const pro = event.currentTarget;
   //隐藏“显示更多”
   pro.style.display="none"  // 当前元素隐藏
   // 根据rootId发起axios请求获取更多的子评论数据
+
   const url = `http://localhost:8080/comment/${rootId}/0/10`; // 假设每次请求10条子评论
-  axios.post(url)
+  axios.get(url)
       .then(response => {
         // 将返回的子评论数据更新到对应的根评论中
-        parentData.rootComment.forEach(item => {
+        rootCommentList.value.forEach(item => {
           if (item.id === rootId) {
             item.childComments = response.data.data;
             // 显示“分页”
@@ -126,6 +181,15 @@ const showMore=(rootId,event)=>{
         console.error(error);
       });
 }
+
+const activeIndex=ref(-1)
+// eslint-disable-next-line no-unused-vars
+const changeActive = (index) => {
+  activeIndex.value=index
+};
+
+const replyStates = reactive({});
+
 
 
 </script>
@@ -222,5 +286,10 @@ const showMore=(rootId,event)=>{
   align-items: center;
   justify-content: center;
 }
-
+.reply-com{
+  display: none;
+}
+.active{
+  display: block;
+}
 </style>

@@ -1,7 +1,7 @@
 <script setup>
 import {defineProps, onMounted, ref} from "vue";
 import {hasLogin} from "@/util/hasLogin";
-import {getCollectList,addCollectVideo} from "@/api/collect";
+import {getCollectListApi,addCollectVideoApi} from "@/api/collect";
 const videoPlayerRef = ref(null);
 
 const fatherData=defineProps({
@@ -106,7 +106,13 @@ const collectList=ref([])
 const showPopover=ref(true)
 // eslint-disable-next-line no-unused-vars
 const collectHandler=async ()=>{
-  collectList.value=await getCollectList();
+  getCollectListApi()
+      .then((res)=>{
+        collectList.value= res.data.data
+      })
+      .catch(err=>{
+        console.log(err)
+      })
   console.log(collectList.value)
 }
 onMounted(()=>{
@@ -127,7 +133,13 @@ const submitForm = (event) => {
     return;
   }
   // 这里可以进行表单提交的操作，比如发送选中的收藏夹ID到后端
-  addCollectVideo(selectedFolder.value,fatherData.id)
+  addCollectVideoApi(selectedFolder.value,fatherData.id)
+      .then((res)=>{
+        console.log(res.data.data)
+      })
+      .catch(err=>{
+        console.log(err)
+      })
   alert('提交成功，选择的收藏夹ID为：' + selectedFolder.value);
 };
 

@@ -27,38 +27,12 @@
 
 <script setup>
 import HomeTopBar from "@/components/home-top-bar.vue";
-// import PageMax from "@/components/page-max.vue";
 import VideoInfoList from "@/components/video-info-list.vue";
 import {onMounted, onUnmounted, ref} from "vue";
 import {getVideoCoverList} from "@/api/video";
 import CarouselView from "@/components/carousel-view.vue";
-const pageData=ref([
-  {
-    "id": "1684931570969931777",
-    "title": "“我来见你了，你住的地方好远啊”",
-    "userId": "1684546112993689601",
-    "userName": "user1",
-    "headImg": "https://p.qqan.com/up/2021-6/16239805423883054.jpg",
-    "userDesc": null,
-    "coverUrl": "https://bilibilicloud.oss-cn-beijing.aliyuncs.com/20230527145250Aicy.jpg",
-    "created": "23-07-28"
-  }
-])
+const pageData=ref([])
 
-
-// eslint-disable-next-line no-unused-vars
-const handlePageData = (data) => {
-  pageData.value=data.data
-};
-
-
-// eslint-disable-next-line no-unused-vars
-const pageParams=ref({
-  type:"get",
-  url:"http://localhost:8080/content/list",
-  config:null,
-  page_size:10
-})
 
 
 const page=ref(-1)
@@ -78,9 +52,6 @@ function loadMore() {
         .catch(err=>{
           console.log(err)
         })
-
-
-
     readyForLoad=true;
   }
 }
@@ -93,7 +64,8 @@ function scrollHandle() {
   const scrollTop=document.body.scrollTop||document.documentElement.scrollTop;
   const clientHeight=document.documentElement.clientHeight;
   const distance=scrollHeight-scrollTop-clientHeight;
-  if (distance<=20){
+  console.log("distance"+distance)
+  if (distance<=1){
     loadMore()
   }
 
@@ -117,6 +89,8 @@ onUnmounted(() => {
   min-width: 1000px;
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .top{
   height: 50px;
@@ -130,14 +104,13 @@ onUnmounted(() => {
 }
 .hot-activity-box{
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-top: 20px;
 }
 .hot-main{
   display: flex;
-  width: 84%;
+  min-width: 1300px;
+  margin: 0 auto;
+  padding-left: 60px;
 }
 .host-left{
   width: 40%;

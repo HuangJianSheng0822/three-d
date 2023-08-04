@@ -1,9 +1,8 @@
 import axios from "axios";
-axios.defaults.baseURL='http://localhost:8080';
 axios.interceptors.request.use(
     (config)=>{
         // 在请求发送前添加 Authorization 请求头
-        const jwtToken = localStorage.getItem('jwt'); // 假设你的 JWT 存储在 localStorage 中
+        const jwtToken = localStorage.getItem('token'); // 假设你的 JWT 存储在 localStorage 中
         if (jwtToken) {
             config.headers.Authorization = jwtToken;
         }
@@ -14,15 +13,10 @@ axios.interceptors.request.use(
     }
 )
 
-function getCollectList() {
+function getCollectListApi() {
     // 在这里进行你的具体请求逻辑
-    return axios.get('/collect/list')
-        .then((res)=>{
-            return res.data.data
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+    return axios.get('/collect/')
+
 }
 
 function addCollect(params){
@@ -35,14 +29,9 @@ function addCollect(params){
         })
 }
 
-function addCollectVideo(collectId,videoId){
-    return axios.post('/collect/video/'+collectId+"/"+videoId)
-        .then((res)=>{
-            return res.data.data
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+function addCollectVideoApi(collectId,videoId){
+    return axios.post('/cv/'+collectId+"/"+videoId)
+
 }
 
-export { getCollectList,addCollect,addCollectVideo };
+export {getCollectListApi,addCollect,addCollectVideoApi };
