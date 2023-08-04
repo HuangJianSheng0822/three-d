@@ -1,5 +1,4 @@
 import axios from "axios";
-
 function login(params){
     return axios.post("/user/login",params)
 }
