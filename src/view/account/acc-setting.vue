@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <el-form ref="userinfoRef" v-model="userInfo" :rules="rules" size="medium" label-width="100px"
+    <el-form ref="userinfoRef" :model="userInfo" :rules="rules" size="medium" label-width="100px"
              label-position="left">
       <el-form-item label="昵称：" prop="name">
         <el-input v-model="userInfo.name" :maxlength="11" show-word-limit clearable :style="{width: '100%'}">
@@ -11,7 +11,7 @@
                   show-word-limit :autosize="{minRows: 4, maxRows: 4}" :style="{width: '100%'}"></el-input>
       </el-form-item>
       <el-form-item size="large">
-        <el-button type="primary" @click="submitForm('userInfo')">提交</el-button>
+        <el-button type="primary" @click="submitForm">提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -19,6 +19,8 @@
 
 <script setup>
 import { ref } from 'vue';
+import {updateUserInfo} from "@/api/user";
+
 
 const userinfoRef=ref(null)
 const userInfo = ref({
@@ -26,20 +28,27 @@ const userInfo = ref({
   desc: undefined,
 });
 
-const rules = ref({
+const rules ={
   name: [
     {
       required: true,
       message: '请输入昵称：',
       trigger: 'blur',
     },
-  ],
-});
+  ]
+};
 
 const submitForm = () => {
   userinfoRef.value.validate((valid) => {
-    if (!valid) return;
-    // TODO 提交表单
+    if (valid) {
+      updateUserInfo(userInfo.value)
+          .then(res=>{
+            console.log(res)
+          })
+          .catch(e=>{
+            console.log(e)
+          })
+    }
   });
 };
 

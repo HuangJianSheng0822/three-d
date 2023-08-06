@@ -61,7 +61,7 @@ onMounted(() => {
 });
 
 // 创建响应式的WebSocket URL
-const webSocketUrl = ref(`ws://localhost:8080/barrage?videoId=${fatherData.id}`);
+const webSocketUrl = ref(`ws://192.168.31.248:8080/barrage?videoId=${fatherData.id}`);
 const webSocket = new WebSocket(webSocketUrl.value);
 // 监听WebSocket消息接收事件
 webSocket.onmessage = (event) => {
@@ -84,7 +84,7 @@ const sendBarrage=()=>{
 
   // 将barrageData数据转换为JSON字符串
   barrageData.value.videoId=fatherData.id;
-  barrageData.value.userId=localStorage.getItem("jwt");
+  barrageData.value.userId=localStorage.getItem("token");
   barrageData.value.schedule=formattedTime
   const dataToSend = JSON.stringify(barrageData.value);
   webSocket.send(dataToSend);
@@ -149,7 +149,7 @@ const submitForm = (event) => {
     <div class="play">
       <div class="video-wrapper">
         <canvas ref="canvas"></canvas>
-        <video ref="videoPlayer" src="../assets/name1.mp4" controls></video>
+        <video ref="videoPlayer" :src="fatherData.videoInfo.playUrl" controls></video>
       </div>
     </div>
     <div class="video-bar">

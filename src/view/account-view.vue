@@ -1,13 +1,10 @@
 <template>
-
   <div class="root">
     <div class="top">
       <home-top-bar></home-top-bar>
     </div>
 
-    <div class="img-box">
-
-    </div>
+    <div class="img-box"></div>
 
     <div class="main-box">
       <div class="main">
@@ -31,11 +28,6 @@ import UserCenterBar from "@/components/user-center-bar.vue";
 
 
 <style scoped>
-.top{
-  height: 50px;
-  width: 100%;
-  min-width: 1500px;
-}
 
 .img-box{
   height: 106px;

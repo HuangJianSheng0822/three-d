@@ -44,7 +44,7 @@ import {useRoute} from "vue-router";
 import {ref} from "vue";
 import RecommendList from "@/components/recommend-list.vue";
 import {getUserInfoApi} from "@/api/user";
-import {getVideoInfoApi} from "@/api/video";
+import {getVideoInfoApi, updatePlayCountApi} from "@/api/video";
 const route=useRoute()
 const id=route.params.id
 const userId=route.params.userId
@@ -67,6 +67,12 @@ const videoInfo=ref({
 //根据id获取视频信息
 getUserInfo(userId)
 getVideoInfo(id);
+updatePlayCount(id)
+function updatePlayCount(videoId){
+  updatePlayCountApi(videoId).then((req)=>{
+    console.log(req.data)
+  })
+}
 function getUserInfo(userId){
   getUserInfoApi(userId)
       .then((res)=>{

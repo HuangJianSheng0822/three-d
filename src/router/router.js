@@ -17,6 +17,10 @@ import AccountView from "@/view/account-view.vue";
 import AccSetting from "@/view/account/acc-setting.vue";
 import AccFace from "@/view/account/acc-face.vue";
 import FavListView from "@/view/fav-list-view.vue";
+import AccUserIntegration from "@/view/account/acc-userIntegration.vue";
+import AccSafety from "@/view/account/acc-safety.vue";
+import AccBlackList from "@/view/account/acc-black-list.vue";
+import AccRecord from "@/view/account/acc-record.vue";
 const routes = [
     {
         path: "/login",
@@ -83,6 +87,26 @@ const routes = [
                 path: "/acc-face",
                 name: "acc-face",
                 component: AccFace
+            },
+            {
+                path: "/acc-integration",
+                name: "acc-integration",
+                component: AccUserIntegration
+            },
+            {
+                path: "/acc-safety",
+                name: "acc-safety",
+                component: AccSafety
+            },
+            {
+                path: "/acc-black-list",
+                name: "acc-black-list",
+                component: AccBlackList
+            },
+            {
+                path: "/acc-record",
+                name: "acc-record",
+                component: AccRecord
             }
         ]
     },

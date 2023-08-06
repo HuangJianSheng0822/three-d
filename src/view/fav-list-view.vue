@@ -4,13 +4,7 @@
     <div class="top">
       <home-top-bar></home-top-bar>
     </div>
-    <div>
-
-    </div>
-
-    <div class="img-box">
-
-    </div>
+    <div class="img-box"></div>
 
     <div class="fav-list">
       <fav-list></fav-list>
@@ -27,9 +21,6 @@ import FavList from "@/components/fav-list.vue";
 
 
 <style scoped>
-.top{
-  height: 50px;
-}
 .img-box{
   height: 100px;
   width: 100%;

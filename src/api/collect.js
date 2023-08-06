@@ -1,4 +1,5 @@
 import axios from "axios";
+
 axios.interceptors.request.use(
     (config)=>{
         // 在请求发送前添加 Authorization 请求头
@@ -20,7 +21,7 @@ function getCollectListApi() {
 }
 
 function addCollect(params){
-    return axios.post('/collect/add',params)
+    return axios.post('/collect/',params)
         .then((res)=>{
             return res.data.data
         })
@@ -34,4 +35,8 @@ function addCollectVideoApi(collectId,videoId){
 
 }
 
-export {getCollectListApi,addCollect,addCollectVideoApi };
+function getCollectInfo(){
+    return null;
+}
+
+export {getCollectListApi,addCollect,addCollectVideoApi,getCollectInfo };

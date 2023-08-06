@@ -10,11 +10,12 @@
       <el-form-item :label="fatherData.title" prop="coverUrl">
         <el-upload
             class="avatar-uploader"
-            action="http://localhost:8080/upload"
+            action="http://192.168.31.248:8080/upload"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
-            style="border: 2px dashed #1f72ba;">
+            style="border: 1px dashed #FF6699;"
+            :class="{avatar_rectangle:fatherData.proportion==='avatar_rectangle'}">
           <img v-if="form.url" :src="form.url" class="avatar" alt="">
           <img v-else src="../assets/ico/upload.png" class="upload-icon" alt="">
         </el-upload>
@@ -28,7 +29,7 @@
 import {defineEmits,ref,defineProps} from "vue";
 
 const emit = defineEmits(['img-upload'])
-const fatherData=defineProps(['title'])
+const fatherData=defineProps(['title','proportion'])
 
 const form=ref({
   url:''
@@ -79,5 +80,8 @@ const beforeAvatarUpload=(file)=> {
   width: 50px;
   margin-top: 54px;
 }
-
+.avatar_rectangle{
+  width: 178px;
+  height: 100px;
+}
 </style>

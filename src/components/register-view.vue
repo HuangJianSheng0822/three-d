@@ -55,7 +55,8 @@
 
 import {ref} from "vue";
 import {useRouter} from "vue-router";
-import axios from "axios";
+import {register} from "@/api/user";
+import {sendEmailApi} from "@/api/email";
 const router = useRouter();
 
 const register_form=ref({
@@ -81,12 +82,12 @@ const rules=ref({
 const submitForm=()=>{
   register_ref.value.validate(valid => {
     if (valid) {
-      axios.post('http://localhost:8080/users/register', register_form.value)
+      register(register_form.value)
           .then(response => {
             console.log('resp=>'+response.data.data)
             // 注册成功，重定向到新页面
             if (response.data.data!=null) {
-              localStorage.setItem("jwt",response.data.data.token)
+              localStorage.setItem("token",response.data.data.token)
               router.push('/home');
             } else {
               alert("注册失败")
@@ -103,7 +104,7 @@ const sendVerificationCode=()=>{
   // 判断邮箱的合法性
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (emailRegex.test(register_form.value.email)) {
-    axios.post('http://localhost:8080/email/'+register_form.value.email)
+    sendEmailApi(register_form.value.email)
         // eslint-disable-next-line no-unused-vars
         .then(response => {
           // 发送成功后开始倒计时

@@ -87,9 +87,8 @@
 <script setup>
 //import axios from 'axios';
 import {defineProps, ref, reactive} from "vue";
-import axios from "axios";
 import ReplyComment from "@/components/reply-comment.vue";
-import {getRootCommentApi} from "@/api/comment";
+import {getChildCommentsApi, getRootCommentApi} from "@/api/comment";
 
 
 const pageReqData=ref({
@@ -163,8 +162,7 @@ const showMore=(rootId,event)=>{
   pro.style.display="none"  // 当前元素隐藏
   // 根据rootId发起axios请求获取更多的子评论数据
 
-  const url = `http://localhost:8080/comment/${rootId}/0/10`; // 假设每次请求10条子评论
-  axios.get(url)
+  getChildCommentsApi(rootId,0,10)
       .then(response => {
         // 将返回的子评论数据更新到对应的根评论中
         rootCommentList.value.forEach(item => {

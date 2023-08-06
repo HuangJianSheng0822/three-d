@@ -1,15 +1,12 @@
 <script setup>
 import {ref} from "vue";
-import axios from "axios";
+import {getVideoCoverList} from "@/api/video";
 
 const videoList=ref([]);
-axios.post("http://localhost:8080/video/self/1/10",null,{
-  headers: {
-    'Authorization': localStorage.getItem("jwt")
-  }
-})
+
+getVideoCoverList(0,10)
     .then((res)=>{
-      videoList.value=res.data.data.list
+      videoList.value=res.data.data
     })
 </script>
 
@@ -35,7 +32,7 @@ axios.post("http://localhost:8080/video/self/1/10",null,{
           <button>B!</button>
           <button>B@</button>
         </div>
-        <hr>
+
       </div>
     </div>
   </div>
@@ -51,14 +48,14 @@ axios.post("http://localhost:8080/video/self/1/10",null,{
 }
 
 .bar{
-  height: 70px;
-  width: 70%;
+  height: 40px;
+  width: 87%;
   display: flex;
-  border-bottom: 2px solid #92de53;
+  border-bottom: 2px solid #FB7299;
   margin-bottom: 20px;
   background-color: white;
   border-radius: 3px;
-  padding: 3px;
+  padding: 5px;
   box-shadow:
       -4px -3.7px 3.6px rgba(0, 0, 0, 0.024),
       -5.8px -5.3px 10px rgba(0, 0, 0, 0.035),
@@ -80,7 +77,7 @@ axios.post("http://localhost:8080/video/self/1/10",null,{
 
 .main{
   height: 700px;
-  width: 70%;
+  width: 87%;
 }
 
 .box{

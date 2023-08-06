@@ -3,14 +3,14 @@ import {ref} from "vue";
 
 const videoList=ref([
   {
-    "id": "123456",
-    "title": "123456",
+    "id": "1684931570969931077",
+    "title": "我来见你了，你住的地方好远啊",
     "userId": "1684546112993689601",
     "userName": "user1",
     "headImg": "https://p.qqan.com/up/2021-6/16239805423883054.jpg",
     "userDesc": null,
-    "coverUrl": "beijing.aliyuncs.com/20230527145250Aicy.jpg",
-    "created": "23-07-30"
+    "coverUrl": "https://bilibilicloud.oss-cn-beijing.aliyuncs.com/v2-0f298674e2d33723d8022df7ac26e17f_r.jpg",
+    "created": "23-07-28"
   },
   {
     "id": "1684931570969931777",
