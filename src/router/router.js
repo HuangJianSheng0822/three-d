@@ -22,6 +22,8 @@ import AccSafety from "@/view/account/acc-safety.vue";
 import AccBlackList from "@/view/account/acc-black-list.vue";
 import AccRecord from "@/view/account/acc-record.vue";
 import LiveView from "@/view/live-view.vue";
+import AccLiveSeting from "@/view/account/acc-live-seting.vue";
+import LivePlayView from "@/view/live-play-view.vue";
 const routes = [
     {
         path: "/login",
@@ -36,8 +38,12 @@ const routes = [
         component:HomeView
     },
     {
-        path: "/live",
+        path: "/live-home",
         component:LiveView
+    },
+    {
+        path: "/live/:id",
+        component: LivePlayView
     },
     {
         path: "/playing/:id/:userId",
@@ -107,6 +113,11 @@ const routes = [
                 path: "/acc-black-list",
                 name: "acc-black-list",
                 component: AccBlackList
+            },
+            {
+                path: "/acc-live-setting",
+                name: "acc-live-setting",
+                component: AccLiveSeting
             },
             {
                 path: "/acc-record",

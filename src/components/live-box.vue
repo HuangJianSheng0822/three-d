@@ -5,8 +5,28 @@
 </template>
 <script setup>
 import flvjs from 'flv.js'
-import {ref} from "vue";
+import {defineProps, ref} from "vue";
+import {getLiveSocketUrl} from "@/api/websocket";
+// eslint-disable-next-line no-unused-vars
+const fatherData=defineProps({
+  id:{
+    type:String,
+    required:true
+  }
+})
 const playing=ref(false);
+
+const socket=getLiveSocketUrl(fatherData.id)
+const webSocket = new WebSocket(socket);
+// 监听WebSocket消息接收事件
+webSocket.onmessage = (event) => {
+  // 在控制台打印响应结果
+  let parse = JSON.parse(event.data);
+  console.log(parse)
+};
+webSocket.onopen = function() {
+  console.log("ws调用连接成功回调方法")
+}
 const play=()=>{
   if (!playing.value){
     if (flvjs.isSupported()) {

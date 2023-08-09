@@ -1,8 +1,8 @@
 <template>
   <div class="msg">
     <div class="sendMsg" id="list">
-      <ul v-for="(item,index) in barrageList" :key="index">
-        <li><span>观众</span>{{item.content}}</li>
+      <ul>
+        <li v-for="(item,index) in barrageList" :key="index"><span>观众</span>{{item.content}}</li>
       </ul>
     </div>
     <div class="inputMsg">
@@ -75,7 +75,7 @@ watch(barrageList.value,()=>{
   overflow-y: auto;
 }
 .sendMsg ul li {
-  line-height: 15px;
+  line-height: 25px;
 
 }
 .sendMsg ul li span {

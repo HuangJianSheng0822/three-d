@@ -49,6 +49,11 @@ const pathList = ref([
 			title: "账号安全",
 			ico: "ico"
 		},
+  {
+    path: "/acc-live-setting",
+    title: "直播设置",
+    ico: "ico"
+  },
 		{
 			path: "/acc-black-list",
 			title: "黑名单管理",
