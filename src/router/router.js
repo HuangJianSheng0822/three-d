@@ -21,6 +21,7 @@ import AccUserIntegration from "@/view/account/acc-userIntegration.vue";
 import AccSafety from "@/view/account/acc-safety.vue";
 import AccBlackList from "@/view/account/acc-black-list.vue";
 import AccRecord from "@/view/account/acc-record.vue";
+import LiveView from "@/view/live-view.vue";
 const routes = [
     {
         path: "/login",
@@ -33,6 +34,10 @@ const routes = [
     {
         path: "/home",
         component:HomeView
+    },
+    {
+        path: "/live",
+        component:LiveView
     },
     {
         path: "/playing/:id/:userId",

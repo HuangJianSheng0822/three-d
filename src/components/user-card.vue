@@ -7,7 +7,7 @@
       <div class="details">
         <div class="name">{{ fatherData.userInfo.name }}</div>
         <div class="description">{{ fatherData.userInfo.desc }}</div>
-        <button class="follow-button" @click="followUser">xxx 123</button>
+        <button class="follow-button" @click="followUser">+ 关 注</button>
       </div>
     </div>
   </div>
@@ -32,8 +32,12 @@ const followUser = () => {
 
 <style scoped>
 .author-info-container {
-  background-color: antiquewhite;
   height: 104px;
+  box-shadow:
+      0px 0px 22px rgba(0, 0, 0, 0.14);
+  border-radius: 5px;
+  padding: 2px;
+
 }
 
 .user-info {
@@ -90,9 +94,10 @@ const followUser = () => {
   flex: 1;
   border-color: #00aeec;
   border-width: 0px;
+  font-weight: bold;
 }
 
 .follow-button:hover {
-  background-color: #B0E2FF;
+  background-color: #0f7ec7;
 }
 </style>

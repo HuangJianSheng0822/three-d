@@ -19,8 +19,8 @@
                                           :maxlength="200" show-word-limit :autosize="{minRows: 4, maxRows: 6}"
                                           style="width: 100%"></el-input>
                             </el-form-item>
-                            <el-form-item label="是否公开" prop="open" required>
-                                <el-switch v-model="typeData.open" active-color="#FFFFFF"></el-switch>
+                            <el-form-item label="是否公开" prop="open">
+                                <el-switch v-model="typeData.open" class="is-open"></el-switch>
                             </el-form-item>
                             <el-form-item size="large">
                                 <el-button type="primary" @click="submitForm('typeData')">提交</el-button>
@@ -66,15 +66,15 @@
                     <div>收藏的视频</div>
                 </div>
                 <div class="list-content">
-                    <div v-for="(item,index) in 20" :key="index">
+                    <div v-for="(item,index) in collectVideoLise" :key="index">
                         <!--收藏列表单个样式-->
                         <div class="fav-block">
                             <!--图片-->
                             <div class="image">
-                                <div class="image-mask">这里可以显示你的内容</div>
+                              <img :src="item.coverUrl" :alt="item.name">
                             </div>
-                            <div class="title">这里是你的视频名字</div>
-                            <div class="tips">收藏于：2023-07-07</div>
+                            <div class="title">{{item.name}}</div>
+                            <div class="tips">收藏于：{{item.created}}</div>
                         </div>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
 
 <script setup>
 import {ref} from 'vue';
-import {getCollectListApi, addCollect} from "@/api/collect";
+import {getCollectListApi, addCollect, getCollectVideoListApi} from "@/api/collect";
 import UploadImages from "@/components/upload-images.vue";
 
 const activeIndex = ref(0); // 默认选中第一个
@@ -97,14 +97,8 @@ const activeCollectData=ref({
   "desc": "",
   "created": ""
 })
-const changeActive = (index, id) => {
-    activeIndex.value = index;
-    types.value.forEach(e=>{
-      if (e.id===id){
-        activeCollectData.value=e
-      }
-    })
-};
+const collectVideoLise=ref([])
+
 
 const types = ref([])
 
@@ -112,6 +106,7 @@ const initTypes = () => {
     getCollectListApi()
         .then((res) => {
             types.value = res.data.data
+          changeActive(0,types.value[0].id)
         })
         .catch(err => {
             console.log(err)
@@ -120,8 +115,22 @@ const initTypes = () => {
 }
 initTypes()
 
+const changeActive = (index, id) => {
+  activeIndex.value = index;
+  types.value.forEach(e=>{
+    if (e.id===id){
+      activeCollectData.value=e
+    }
+  })
+  getCollectVideoListApi(id,0,10)
+      .then(res=>{
+        collectVideoLise.value=res.data.data
+      })
+      .catch(e=>{
+        console.log(e)
+      })
+};
 
-console.log("val" + types.value)
 
 const imgUrl = ref('')
 const addFormRef = ref(null)
@@ -158,18 +167,6 @@ const resetForm = () => {
     addFormRef.value.valid.resetFields();
 };
 
-// eslint-disable-next-line no-unused-vars
-const coverUrlBeforeUpload = (file) => {
-    const isRightSize = file.size / 1024 / 1024 < 2;
-    if (!isRightSize) {
-        //$message.error('文件大小超过 2MB');
-    }
-    const isAccept = new RegExp('image/*').test(file.type);
-    if (!isAccept) {
-        //$message.error('应该选择image/*类型的文件');
-    }
-    return isRightSize && isAccept;
-};
 </script>
 
 <style scoped>
@@ -280,5 +277,35 @@ const coverUrlBeforeUpload = (file) => {
 .image>img{
   width: 100%;
   height: 100%;
+}
+
+
+
+
+
+.is-open::after {
+  content: url("data:image/svg+xml,%3Csvg xmlns='://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.55021 5.84315L17.1568 16.4498L16.4497 17.1569L5.84311 6.55026L6.55021 5.84315Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M17.1567 6.55021L6.55012 17.1568L5.84302 16.4497L16.4496 5.84311L17.1567 6.55021Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3C/svg%3E");
+  position: absolute;
+  top: 0;
+  left: 20px;
+}
+
+.is-open:checked {
+  border: 2px solid #02c202;
+  background: #e2f1e1;
+}
+
+.is-open:checked::before {
+  background: rgba(2, 194, 2, 0.5);
+  border: 2px solid #02c202;
+  transform: translate(133%, 13%);
+  transition: all 0.3s ease-in-out;
+}
+
+.is-open:checked::after {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='15' height='13' viewBox='0 0 15 13' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M14.8185 0.114533C15.0314 0.290403 15.0614 0.605559 14.8855 0.818454L5.00187 12.5L0.113036 6.81663C-0.0618274 6.60291 -0.0303263 6.2879 0.183396 6.11304C0.397119 5.93817 0.71213 5.96967 0.886994 6.18339L5.00187 11L14.1145 0.181573C14.2904 -0.0313222 14.6056 -0.0613371 14.8185 0.114533Z' fill='%2302C202' fill-opacity='0.9'/%3E%3C/svg%3E");
+  position: absolute;
+  top: 5px;
+  left: 5px;
 }
 </style>

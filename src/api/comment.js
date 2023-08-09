@@ -3,7 +3,15 @@ function getChildCommentsApi(rootId,page,size){
     return axios.get("/comment/"+rootId+"/"+page+"/"+size)
 }
 
-function getRootCommentApi(id){
-    return axios.get("/comment/"+id);
+function getRootCommentApi(id,page,size){
+    return axios.get("/comment/r/"+id+"/"+page+"/"+size);
 }
-export {getChildCommentsApi,getRootCommentApi}
+
+function addCommentApi(params){
+    return axios.post("/comment/",params,{
+        headers: {
+            'Authorization': localStorage.getItem("token")
+        }
+    })
+}
+export {getChildCommentsApi,getRootCommentApi,addCommentApi}

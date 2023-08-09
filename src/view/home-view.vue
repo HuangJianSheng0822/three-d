@@ -4,7 +4,9 @@
             <home-top-bar></home-top-bar>
         </div>
         <!--首页顶部壁纸-->
-        <div class="banner"></div>
+        <div class="banner">
+          <img src="@/assets/img/p1_1.jpg">
+        </div>
         <!--热门推荐-->
         <div class="hot-activity-box">
             <div class="hot-main">
@@ -93,9 +95,13 @@ onUnmounted(() => {
 }
 
 .banner {
-    background: rgb(233, 249, 250);
-    background: linear-gradient(90deg, rgba(233, 249, 250, 1) 0%, rgba(0, 212, 255, 1) 100%);
+    //background: rgb(233, 249, 250);
+    //background: linear-gradient(90deg, rgba(233, 249, 250, 1) 0%, rgba(0, 212, 255, 1) 100%);
     height: 150px;
+}
+.banner>img{
+  width: 100%;
+  height: 100%;
 }
 
 .top {

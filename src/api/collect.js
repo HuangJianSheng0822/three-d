@@ -35,8 +35,13 @@ function addCollectVideoApi(collectId,videoId){
 
 }
 
-function getCollectInfo(){
-    return null;
+function getCollectVideoListApi(collectId,page,size){
+    return axios.post('/cv/'+collectId+"/"+page+"/"+size)
 }
 
-export {getCollectListApi,addCollect,addCollectVideoApi,getCollectInfo };
+function hasCollectVideoApi(videoId){
+    return axios.post("/cv/"+videoId)
+}
+
+export {getCollectListApi,addCollect,addCollectVideoApi,getCollectVideoListApi
+,hasCollectVideoApi};

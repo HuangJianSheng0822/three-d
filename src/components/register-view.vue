@@ -94,7 +94,7 @@ const submitForm=()=>{
             }
           })
           .catch(error => {
-            console.error(error);
+            console.log(error);
           });
     }
   })
@@ -117,7 +117,7 @@ const sendVerificationCode=()=>{
           }, 1000);
         })
         .catch(error => {
-          console.error('发送验证码失败:', error);
+          console.log('发送验证码失败:', error);
         });
   }
 }

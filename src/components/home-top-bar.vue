@@ -3,9 +3,8 @@
         <div class="nav">
             <div class="navbar">
                 <router-link to="/home">首页</router-link>
-                <router-link to="/home">About</router-link>
-                <router-link to="/home">Services</router-link>
-                <router-link to="/home">Contact</router-link>
+                <router-link to="/live">直播</router-link>
+                <router-link to="/home">笔记</router-link>
             </div>
         </div>
         <div class="search">

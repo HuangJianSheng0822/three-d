@@ -44,7 +44,7 @@ import {useRoute} from "vue-router";
 import {ref} from "vue";
 import RecommendList from "@/components/recommend-list.vue";
 import {getUserInfoApi} from "@/api/user";
-import {getVideoInfoApi, updatePlayCountApi} from "@/api/video";
+import { getVideoInfoApi, updatePlayCountApi} from "@/api/video";
 const route=useRoute()
 const id=route.params.id
 const userId=route.params.userId
@@ -126,10 +126,8 @@ function getVideoInfo(id){
 
 .comment-area{
 
-
 }
 .author-info-container {
-  background-color: antiquewhite;
   height: 104px;
 }
 .bui-area {

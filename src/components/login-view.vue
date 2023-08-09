@@ -74,7 +74,7 @@ const submitForm=()=>{
             }
           })
           .catch(error => {
-            console.error(error);
+            console.log(error);
           });
     }
 
